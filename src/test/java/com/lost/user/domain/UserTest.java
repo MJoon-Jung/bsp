@@ -24,8 +24,8 @@ class UserTest {
     };
 
     @Test
-    @DisplayName("비밀번호를 암호화할 수 있다")
-    void hash_password_return_user_with_an_encrypted_password() {
+    @DisplayName("비밀번호 암호화 성공")
+    void should_be_success_when_encrypt_password() {
         //given
         User user = User.builder()
                 .id(1L)
@@ -35,7 +35,7 @@ class UserTest {
                 .role(UserRole.MEMBER)
                 .build();
         //when
-        User result = user.hashPassword(passwordEncoder);
+        User result = user.encryptPassword(passwordEncoder);
         //then
         assertAll(
                 () -> assertThat(result.getId()).isEqualTo(1L),
@@ -46,10 +46,10 @@ class UserTest {
                         "passwordabcdefghijklmnopqrstuvwxyz1234567890"));
     }
 
-    @DisplayName("비밀번호와 암호화된 비밀번호와 일치하는지 확인할 수 있다")
+    @DisplayName("암호화된 비밀번호와 일치하는지 확인이 가능")
     @ParameterizedTest
     @CsvSource(value = {"password,true", "password2,false"})
-    void compare_to_plain_password_returned_true(String plainPassword, Boolean expected) {
+    void should_be_returned_expected_result_when_compare_to_plain_password(String plainPassword, Boolean expected) {
         //given
         User user = User.builder()
                 .id(1L)
@@ -58,7 +58,7 @@ class UserTest {
                 .password("password")
                 .role(UserRole.MEMBER)
                 .build();
-        User hashPasswordUser = user.hashPassword(passwordEncoder);
+        User hashPasswordUser = user.encryptPassword(passwordEncoder);
         //when
         boolean result = hashPasswordUser.equalsToPlainPassword(plainPassword, passwordEncoder);
         //then
@@ -66,8 +66,8 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("개인정보를 수정할 수 있다.")
-    void update_user_return_updated_user() {
+    @DisplayName("개인정보 수정 성공")
+    void should_be_update_success_when_updateProfile() {
         //given
         User user = User.builder()
                 .id(1L)

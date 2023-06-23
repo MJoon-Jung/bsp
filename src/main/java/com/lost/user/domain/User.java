@@ -1,5 +1,6 @@
 package com.lost.user.domain;
 
+import com.lost.auth.controller.request.SignUpRequest;
 import com.lost.post.domain.Post;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,7 +35,7 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public User hashPassword(PasswordEncoder passwordEncoder) {
+    public User encryptPassword(PasswordEncoder passwordEncoder) {
         return this.toBuilder()
                 .password(passwordEncoder.encode(password))
                 .build();
@@ -49,6 +50,15 @@ public class User {
 
     public boolean equalsToPlainPassword(String plainPassword, PasswordEncoder passwordEncoder) {
         return passwordEncoder.matches(plainPassword, password);
+    }
+
+    public static User from(SignUpRequest signUpRequest) {
+        return User.builder()
+                .email(signUpRequest.getEmail())
+                .nickname(signUpRequest.getNickname())
+                .password(signUpRequest.getPassword())
+                .role(UserRole.MEMBER)
+                .build();
     }
 
     @Override
