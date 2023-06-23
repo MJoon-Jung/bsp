@@ -7,4 +7,9 @@ public class UnauthorizedException extends LostBusinessException {
     public UnauthorizedException() {
         super(MESSAGE);
     }
+
+    @Override
+    public int statusCode() {
+        return 401;
+    }
 }

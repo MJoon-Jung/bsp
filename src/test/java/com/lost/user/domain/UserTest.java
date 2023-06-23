@@ -35,7 +35,7 @@ class UserTest {
                 .role(UserRole.MEMBER)
                 .build();
         //when
-        User result = user.hashPassword(passwordEncoder);
+        User result = user.encryptPassword(passwordEncoder);
         //then
         assertAll(
                 () -> assertThat(result.getId()).isEqualTo(1L),
@@ -58,7 +58,7 @@ class UserTest {
                 .password("password")
                 .role(UserRole.MEMBER)
                 .build();
-        User hashPasswordUser = user.hashPassword(passwordEncoder);
+        User hashPasswordUser = user.encryptPassword(passwordEncoder);
         //when
         boolean result = hashPasswordUser.equalsToPlainPassword(plainPassword, passwordEncoder);
         //then
