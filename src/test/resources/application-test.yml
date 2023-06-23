@@ -10,3 +10,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  session:
+    storeType: jdbc
+    jdbc:
+      tableName: SPRING_SESSION
+      schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
+      initializeSchema: always

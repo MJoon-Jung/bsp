@@ -39,3 +39,7 @@ out/
 
 ### ENV ###
 application.properties
+
+docker-compose.yml
+Dockerfile
+http

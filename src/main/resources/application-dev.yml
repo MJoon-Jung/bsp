@@ -6,7 +6,24 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+  session:
+    storeType: jdbc
+    jdbc:
+      tableName: SPRING_SESSION
+      schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
+      initializeSchema: always
+server:
+  servlet:
+    session:
+      timeout: 1800
+      tracking-modes: cookie
+      cookie:
+        max-age: 1800
+        httpOnly: true
+#        sameSite: strict
+#        secure: true
+#        domain: localhost
