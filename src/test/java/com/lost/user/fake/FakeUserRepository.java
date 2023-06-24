@@ -49,4 +49,12 @@ public class FakeUserRepository implements UserRepository {
                 .findAny()
                 .map(UserJpaEntity::toModel);
     }
+
+    @Override
+    public Optional<User> findByNickname(String nickname) {
+        return data.stream()
+                .filter(user -> user.getNickname().equals(nickname))
+                .findAny()
+                .map(UserJpaEntity::toModel);
+    }
 }

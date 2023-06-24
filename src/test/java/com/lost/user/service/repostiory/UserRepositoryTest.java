@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-//@SpringBootTest
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class UserRepositoryTest {
@@ -38,6 +37,31 @@ class UserRepositoryTest {
         userRepository.save(UserJpaEntity.from(user));
         //when
         Optional<UserJpaEntity> maybeUser = userRepository.findByEmail("example@email.com");
+        //then
+        assertThat(maybeUser).isPresent();
+        UserJpaEntity findUser = maybeUser.get();
+        assertAll(
+                () -> assertThat(findUser.getId()).isNotNull(),
+                () -> assertThat(findUser.getEmail()).isEqualTo("example@email.com"),
+                () -> assertThat(findUser.getNickname()).isEqualTo("example"),
+                () -> assertThat(findUser.getPassword()).isEqualTo("password")
+        );
+    }
+
+    @Test
+    @DisplayName("닉네임으로 유저 찾기 성공")
+    void should_return_user_when_findByNickname() {
+        //given
+        User user = User.builder()
+                .email("example@email.com")
+                .nickname("example")
+                .password("password")
+                .role(UserRole.MEMBER)
+                .build();
+
+        userRepository.save(UserJpaEntity.from(user));
+        //when
+        Optional<UserJpaEntity> maybeUser = userRepository.findByNickname("example");
         //then
         assertThat(maybeUser).isPresent();
         UserJpaEntity findUser = maybeUser.get();
