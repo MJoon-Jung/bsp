@@ -3,9 +3,10 @@ package com.lost.auth.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.lost.auth.controller.request.SignUpRequest;
+import com.lost.user.controller.request.SignUpRequest;
 import com.lost.user.domain.User;
 import com.lost.user.fake.FakeUserRepository;
+import com.lost.user.service.UserSignUpService;
 import com.lost.user.service.repostiory.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;

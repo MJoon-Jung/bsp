@@ -1,4 +1,4 @@
-package com.lost.auth.controller.request;
+package com.lost.user.controller.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

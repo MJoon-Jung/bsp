@@ -1,7 +1,7 @@
-package com.lost.auth.controller;
+package com.lost.user.controller;
 
-import com.lost.auth.controller.request.SignUpRequest;
-import com.lost.auth.service.UserSignUpService;
+import com.lost.user.controller.request.SignUpRequest;
+import com.lost.user.service.UserSignUpService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

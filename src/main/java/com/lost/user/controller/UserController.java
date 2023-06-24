@@ -2,7 +2,10 @@ package com.lost.user.controller;
 
 import com.lost.common.domain.exception.InvalidRequestException;
 import com.lost.user.controller.response.CheckDuplicatedUserNicknameResponse;
+import com.lost.user.controller.response.UserResponse;
 import com.lost.user.service.UserService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,5 +33,11 @@ public class UserController {
         Boolean result = userService.checkDuplicatedNickname(nickname);
         return ResponseEntity.ok()
                 .body(CheckDuplicatedUserNicknameResponse.from(result));
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponse> getOne(@Valid @Positive Long userId) {
+        return ResponseEntity.ok()
+                .body(UserResponse.from(userService.getOne(userId)));
     }
 }

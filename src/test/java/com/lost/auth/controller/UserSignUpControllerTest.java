@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lost.auth.controller.request.SignUpRequest;
+import com.lost.user.controller.request.SignUpRequest;
 import com.lost.user.domain.User;
 import com.lost.user.service.repostiory.UserRepository;
 import java.util.Optional;
