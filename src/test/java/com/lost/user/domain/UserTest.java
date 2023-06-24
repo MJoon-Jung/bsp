@@ -3,6 +3,7 @@ package com.lost.user.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.lost.user.controller.request.UpdateProfileRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -76,8 +77,13 @@ class UserTest {
                 .password("password")
                 .role(UserRole.MEMBER)
                 .build();
+
+        UpdateProfileRequest updateProfileRequest = UpdateProfileRequest.builder()
+                .nickname("example2")
+                .password("password2")
+                .build();
         //when
-        User result = user.updateProfile("example2", "password2");
+        User result = user.updateProfile(updateProfileRequest);
         //then
         assertAll(
                 () -> assertThat(result.getId()).isEqualTo(1L),

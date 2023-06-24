@@ -2,6 +2,7 @@ package com.lost.user.domain;
 
 import com.lost.post.domain.Post;
 import com.lost.user.controller.request.SignUpRequest;
+import com.lost.user.controller.request.UpdateProfileRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -41,10 +42,10 @@ public class User {
                 .build();
     }
 
-    public User updateProfile(String nickname, String password) {
+    public User updateProfile(UpdateProfileRequest updateProfileRequest) {
         return this.toBuilder()
-                .nickname(nickname)
-                .password(password)
+                .nickname(updateProfileRequest.getNickname())
+                .password(updateProfileRequest.getPassword())
                 .build();
     }
 
