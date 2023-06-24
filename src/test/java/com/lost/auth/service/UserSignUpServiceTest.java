@@ -14,7 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-class RegisterServiceTest {
+class UserSignUpServiceTest {
 
     private UserSignUpService userSignUpService;
     private PasswordEncoder passwordEncoder;
@@ -39,8 +39,8 @@ class RegisterServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 성공한다.")
-    void register() {
+    @DisplayName("회원가입 성공")
+    void should_be_sign_up_success_when_passed_correct_request() {
         //given
         SignUpRequest signUpRequest = SignUpRequest.builder()
                 .email("example@email.com")

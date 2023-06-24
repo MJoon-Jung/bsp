@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.io.IOException;
 import java.util.Map;
 import org.springframework.http.HttpMethod;
@@ -51,10 +52,12 @@ public class JsonLoginRequestFilter extends AbstractAuthenticationProcessingFilt
 
     private class LoginRequest {
 
-        @NotBlank
-        @Email
+        @NotBlank(message = "이메일은 필수 입력 값입니다.")
+        @Email(message = "이메일 형식이 올바르지 않습니다.")
         private String email;
-        @NotBlank
+
+        @NotBlank(message = "비밀번호는 6자 이상이어야 합니다.")
+        @Size(min = 6, message = "비밀번호는 6자 이상이어야 합니다.")
         private String password;
 
         public LoginRequest(@Valid String email, @Valid String password) {

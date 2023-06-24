@@ -1,7 +1,7 @@
-package com.lost.auth.controller;
+package com.lost.user.controller;
 
-import com.lost.auth.controller.request.SignUpRequest;
-import com.lost.auth.service.UserRegisterService;
+import com.lost.user.controller.request.SignUpRequest;
+import com.lost.user.service.UserSignUpService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class UserRegisterController {
+public class UserSignUpController {
 
-    private final UserRegisterService userRegisterService;
+    private final UserSignUpService userSignUpService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/api/auth/signup")
     public void signup(@Valid @RequestBody SignUpRequest request) {
-        userRegisterService.signUp(request);
+        userSignUpService.signUp(request);
     }
 }

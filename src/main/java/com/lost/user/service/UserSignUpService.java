@@ -1,7 +1,7 @@
-package com.lost.auth.service;
+package com.lost.user.service;
 
-import com.lost.auth.controller.request.SignUpRequest;
 import com.lost.common.domain.exception.UserAlreadyExistsException;
+import com.lost.user.controller.request.SignUpRequest;
 import com.lost.user.domain.User;
 import com.lost.user.service.repostiory.UserRepository;
 import java.util.Optional;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserRegisterService {
+public class UserSignUpService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

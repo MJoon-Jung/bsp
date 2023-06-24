@@ -1,7 +1,7 @@
 package com.lost.user.domain;
 
-import com.lost.auth.controller.request.SignUpRequest;
 import com.lost.post.domain.Post;
+import com.lost.user.controller.request.SignUpRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;

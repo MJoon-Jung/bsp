@@ -22,11 +22,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
 
+@SqlGroup({
+        @Sql(value = "/sql/user/delete-user.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD),
+})
 @AutoConfigureMockMvc
 @SpringBootTest
-class UserRegisterControllerTest {
+class UserSignUpControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,12 +48,12 @@ class UserRegisterControllerTest {
 
     @Test
     @DisplayName("회원가입 성공")
-    void request_signup_user_returned_user() throws Exception {
+    void should_be_sign_up_success_when_passed_correct_request() throws Exception {
         //given
         SignUpRequest signUpRequest = SignUpRequest.builder()
                 .email("example@email.com")
                 .nickname("example")
-                .password("password")
+                .password("examplepassword")
                 .build();
         String json = objectMapper.writeValueAsString(signUpRequest);
         //when
@@ -64,25 +70,25 @@ class UserRegisterControllerTest {
         assertAll(
                 () -> assertThat(user.getId()).isNotNull(),
                 () -> assertThat(user.getEmail()).isEqualTo("example@email.com"),
-                () -> assertThat(user.equalsToPlainPassword("password", passwordEncoder)).isTrue(),
+                () -> assertThat(user.equalsToPlainPassword("examplepassword", passwordEncoder)).isTrue(),
                 () -> assertThat(user.getNickname()).isEqualTo("example"));
     }
 
     @Test
-    @DisplayName("회원가입 - 이메일 중복")
-    void test_fail_when_duplicated_email() throws Exception {
+    @DisplayName("회원가입 실패 - 이메일 중복")
+    void should_be_sign_up_fail_when_email_is_not_unique() throws Exception {
         //given
         userRepository.save(User.builder()
                 .id(1L)
                 .email("example@email.com")
                 .nickname("example2")
-                .password("password")
+                .password("examplepassword")
                 .build());
 
         SignUpRequest signUpRequest = SignUpRequest.builder()
                 .email("example@email.com")
                 .nickname("example")
-                .password("password")
+                .password("examplepassword")
                 .build();
         String json = objectMapper.writeValueAsString(signUpRequest);
         //when
@@ -100,13 +106,13 @@ class UserRegisterControllerTest {
     @DisplayName("회원가입 실패 - 이메일 검증")
     @ParameterizedTest
     @NullSource
-    @ValueSource(strings = {"", " ", "emsamdsfadsdasfas", "asdf.com"})
-    void a(String email) throws Exception {
+    @ValueSource(strings = {"", " ", "notemailformat", "email.com"})
+    void should_be_sign_up_failed_when_email_address_format_is_not_valid(String email) throws Exception {
         //given
         SignUpRequest signUpRequest = SignUpRequest.builder()
                 .email(email)
                 .nickname("example")
-                .password("password")
+                .password("examplepassword")
                 .build();
         String json = objectMapper.writeValueAsString(signUpRequest);
         //when
@@ -125,12 +131,12 @@ class UserRegisterControllerTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = {"", " "})
-    void b(String nickname) throws Exception {
+    void should_be_sign_up_failed_when_nickname_is_blank_or_null(String nickname) throws Exception {
         //given
         SignUpRequest signUpRequest = SignUpRequest.builder()
                 .email("example@email.com")
                 .nickname(nickname)
-                .password("password")
+                .password("examplepassword")
                 .build();
         String json = objectMapper.writeValueAsString(signUpRequest);
         //when
@@ -148,8 +154,8 @@ class UserRegisterControllerTest {
     @DisplayName("회원가입 실패 - 패스워드 검증")
     @ParameterizedTest
     @NullSource
-    @ValueSource(strings = {"", " ",})
-    void c(String password) throws Exception {
+    @ValueSource(strings = {"", " ", "1234"})
+    void should_be_sign_up_failed_when_password_is_less_than_6_digits(String password) throws Exception {
         //given
         SignUpRequest signUpRequest = SignUpRequest.builder()
                 .email("example@email.com")

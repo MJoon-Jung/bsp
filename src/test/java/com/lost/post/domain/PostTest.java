@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 class PostTest {
 
     @Test
-    @DisplayName("게시글을 생성할 수 있다")
-    void should_be_returned_new_post() {
+    @DisplayName("게시글 생성 성공")
+    void should_be_success_when_create_new_post() {
         //given
         Post post = Post.builder()
                 .id(1L)
@@ -54,8 +54,8 @@ class PostTest {
     }
 
     @Test
-    @DisplayName("게시글을 생성할 수 있다")
-    void update_post_returned_updated_post() {
+    @DisplayName("게시글 수정 성공")
+    void should_be_updated_when_post_is_updated() {
         //given
         User user = User.builder()
                 .id(1L)
@@ -104,8 +104,8 @@ class PostTest {
     }
 
     @Test
-    @DisplayName("분실물을 찾으면 findUser와 status가 수정된다.")
-    void if_find_lost_item_updated_findUser_and_status() {
+    @DisplayName("post finder, status 수정 - 분실물이 찾아졌을 때")
+    void should_update_finder_and_status_when_lost_item_is_found() {
         //given
         User user = User.builder()
                 .id(1L)
