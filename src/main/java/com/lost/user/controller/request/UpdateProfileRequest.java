@@ -1,13 +1,16 @@
 package com.lost.user.controller.request;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UpdateProfileRequest {
 
-    private final String nickname;
-    private final String password;
+    private String nickname;
+    private String password;
 
     @Builder
     public UpdateProfileRequest(String nickname, String password) {
