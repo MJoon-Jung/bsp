@@ -2,8 +2,8 @@ package com.lost.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.lost.fake.FakeUserRepository;
 import com.lost.user.domain.User;
-import com.lost.user.fake.FakeUserRepository;
 import com.lost.user.service.repostiory.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

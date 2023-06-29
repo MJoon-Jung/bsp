@@ -1,4 +1,4 @@
-package com.lost.user.fake;
+package com.lost.fake;
 
 import com.lost.user.domain.User;
 import com.lost.user.infra.entity.UserJpaEntity;
@@ -56,5 +56,11 @@ public class FakeUserRepository implements UserRepository {
                 .filter(user -> user.getNickname().equals(nickname))
                 .findAny()
                 .map(UserJpaEntity::toModel);
+    }
+
+    @Override
+    public UserJpaEntity save(UserJpaEntity userJpaEntity) {
+        User user = save(userJpaEntity.toModel());
+        return UserJpaEntity.from(user);
     }
 }

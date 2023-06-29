@@ -30,8 +30,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @SqlGroup({
-        @Sql(value = "/sql/post/insert-post-controller-data.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
-        @Sql(value = "/sql/post/delete-data.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD),
+        @Sql(value = "/sql/insert-post-controller-data.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
+        @Sql(value = "/sql/delete-data.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD),
 })
 @SpringBootTest
 class PostCreateControllerTest {

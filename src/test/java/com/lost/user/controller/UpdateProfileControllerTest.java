@@ -29,8 +29,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 @SqlGroup({
-        @Sql(value = "/sql/user/insert-user-controller-data.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
-        @Sql(value = "/sql/user/delete-user.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD),
+        @Sql(value = "/sql/insert-user-controller-data.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
+        @Sql(value = "/sql/delete-data.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD),
 })
 @SpringBootTest
 class UpdateProfileControllerTest {
