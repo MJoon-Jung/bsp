@@ -39,6 +39,7 @@ public class ImagePostJpaEntity extends ImageJpaEntity {
         imagePostJpaEntity.setUrl(image.getUrl());
         imagePostJpaEntity.setFileName(image.getFileName());
         imagePostJpaEntity.setFileSize(image.getFileSize());
+        imagePostJpaEntity.setFileType(image.getFileType());
         imagePostJpaEntity.setCreatedAt(image.getCreatedAt());
         imagePostJpaEntity.setUpdatedAt(image.getUpdatedAt());
         imagePostJpaEntity.postJpaEntity = postJpaEntity;

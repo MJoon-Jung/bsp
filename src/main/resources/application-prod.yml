@@ -24,6 +24,16 @@ server:
       cookie:
         max-age: 1800
         httpOnly: true
-        sameSite: strict
-        secure: true
-#        domain:
+    multipart:
+      enabled: true
+      location: /home/jun/dev/lost/src/main/resources/tmp
+      max-file-size: 128KB
+      max-request-size: 128KB
+#        sameSite: strict
+#        secure: true
+#        domain: localhost
+
+storage:
+  image-config:
+    root-location: src/main/resources/public/upload/image
+    base-url: http://localhost:8080/upload/image

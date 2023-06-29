@@ -22,7 +22,7 @@ public abstract class ImageJpaEntity extends BaseTimeJpaEntity {
     private Long id;
     private String url;
     private String fileName;
-    private Integer fileSize;
+    private Long fileSize;
     @Enumerated(EnumType.STRING)
     private FileType fileType;
 }

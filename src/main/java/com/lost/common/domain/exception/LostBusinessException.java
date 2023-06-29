@@ -12,6 +12,10 @@ public abstract class LostBusinessException extends RuntimeException {
         super(message);
     }
 
+    public LostBusinessException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public void addValidation(String field, String message) {
         validation.put(field, message);
     }

@@ -36,6 +36,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 .requestMatchers("/favicon.ico")
+                .requestMatchers("/upload/image/**")
                 .requestMatchers("/error");
     }
 
@@ -43,14 +44,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
                         .requestMatchers("/api/users/duplicate/check").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jsonLoginRequestFilter(), UsernamePasswordAuthenticationFilter.class)
-                .logout(config ->
-                        config.logoutUrl("/api/auth/logout").permitAll())
+                .logout(config -> config.logoutUrl("/api/auth/logout"))
                 .build();
     }
 

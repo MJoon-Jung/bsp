@@ -60,6 +60,7 @@ public class PostJpaEntity extends BaseTimeJpaEntity {
                 .id(getId())
                 .title(title)
                 .content(content)
+                .reward(reward)
                 .tradeType(tradeType)
                 .writer(getUserJpaEntity().toModel())
                 .lostItem(LostItem.builder()
@@ -70,13 +71,13 @@ public class PostJpaEntity extends BaseTimeJpaEntity {
                                 .toList())
                         .build())
                 .status(status)
-                .finder(finder.toModel())
+                .finder(finder != null ? finder.toModel() : null)
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
                 .build();
     }
 
-    public PostJpaEntity from(Post post) {
+    public static PostJpaEntity from(Post post) {
         PostJpaEntity postJpaEntity = new PostJpaEntity();
         postJpaEntity.id = post.getId();
         postJpaEntity.title = post.getTitle();
@@ -86,11 +87,15 @@ public class PostJpaEntity extends BaseTimeJpaEntity {
         postJpaEntity.address = post.getLostItem().getAddress();
         postJpaEntity.status = post.getStatus();
         postJpaEntity.tradeType = post.getTradeType();
-        postJpaEntity.imagePostJpaEntities = post.getLostItem().getImages().stream()
-                .map((image) -> ImagePostJpaEntity.from(image, this))
-                .toList();
+        if (post.getLostItem().getImages() != null) {
+            postJpaEntity.imagePostJpaEntities = post.getLostItem().getImages().stream()
+                    .map((image) -> ImagePostJpaEntity.from(image, postJpaEntity))
+                    .toList();
+        }
         postJpaEntity.userJpaEntity = UserJpaEntity.from(post.getWriter());
-        postJpaEntity.finder = UserJpaEntity.from(post.getFinder());
+        if (post.getFinder() != null) {
+            postJpaEntity.finder = UserJpaEntity.from(post.getFinder());
+        }
         postJpaEntity.setCreatedAt(post.getCreatedAt());
         postJpaEntity.setUpdatedAt(post.getUpdatedAt());
         return postJpaEntity;

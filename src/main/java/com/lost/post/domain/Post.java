@@ -1,8 +1,11 @@
 package com.lost.post.domain;
 
 import com.lost.common.domain.exception.UnauthorizedException;
+import com.lost.image.domain.Image;
+import com.lost.post.controller.request.PostCreateRequest;
 import com.lost.user.domain.User;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -38,7 +41,6 @@ public class Post {
         this.updatedAt = updatedAt;
     }
 
-
     public Post update(final String title, final String content, final TradeType tradeType, final LostItem lostItem,
             final User user) {
         if (!writer.equals(user)) {
@@ -56,6 +58,37 @@ public class Post {
         return this.toBuilder()
                 .status(status)
                 .finder(findUser)
+                .build();
+    }
+
+    public static Post from(PostCreateRequest postCreateRequest, User user) {
+        return Post.builder()
+                .title(postCreateRequest.getTitle())
+                .content(postCreateRequest.getContent())
+                .reward(postCreateRequest.getReward())
+                .tradeType(postCreateRequest.getTradeType())
+                .writer(user)
+                .lostItem(LostItem.builder()
+                        .name(postCreateRequest.getItemName())
+                        .address(postCreateRequest.getAddress())
+                        .build())
+                .status(PostStatus.PENDING)
+                .build();
+    }
+
+    public static Post from(PostCreateRequest postCreateRequest, User user, List<Image> images) {
+        return Post.builder()
+                .title(postCreateRequest.getTitle())
+                .content(postCreateRequest.getContent())
+                .reward(postCreateRequest.getReward())
+                .tradeType(postCreateRequest.getTradeType())
+                .writer(user)
+                .lostItem(LostItem.builder()
+                        .name(postCreateRequest.getItemName())
+                        .address(postCreateRequest.getAddress())
+                        .images(images)
+                        .build())
+                .status(PostStatus.PENDING)
                 .build();
     }
 }

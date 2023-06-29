@@ -40,6 +40,7 @@ out/
 ### ENV ###
 application.properties
 
-docker-compose.yml
+docker-compose-*.yml
 Dockerfile
 http
+public
