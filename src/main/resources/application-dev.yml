@@ -33,6 +33,9 @@ server:
 #        secure: true
 #        domain: localhost
 
+env:
+  client-url: http://localhost:3000
+
 storage:
   image-config:
     root-location: src/main/resources/public/upload/image

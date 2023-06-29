@@ -1,6 +1,6 @@
 package com.lost;
 
-import com.lost.image.domain.StorageProperties;
+import com.lost.common.domain.StorageProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

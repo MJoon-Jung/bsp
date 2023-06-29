@@ -1,9 +1,9 @@
 package com.lost.image.service;
 
+import com.lost.common.domain.StorageProperties.ImageConfig;
 import com.lost.common.domain.exception.StorageException;
 import com.lost.image.domain.FileType;
 import com.lost.image.domain.Image;
-import com.lost.image.domain.StorageProperties.ImageConfig;
 import com.lost.image.service.repository.ImagePostRepository;
 import java.io.IOException;
 import java.io.InputStream;

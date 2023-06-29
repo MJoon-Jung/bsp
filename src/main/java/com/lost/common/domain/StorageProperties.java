@@ -1,4 +1,4 @@
-package com.lost.image.domain;
+package com.lost.common.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

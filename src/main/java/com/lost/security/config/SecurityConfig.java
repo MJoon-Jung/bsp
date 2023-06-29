@@ -1,6 +1,7 @@
 package com.lost.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lost.common.domain.EnvProperties;
 import com.lost.security.filter.JsonLoginRequestFilter;
 import com.lost.security.handler.LoginFailureHandler;
 import com.lost.security.handler.LoginSuccessHandler;
@@ -23,6 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -31,6 +35,7 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
+    private final EnvProperties envProperties;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -50,9 +55,24 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
+                .addFilter(corsFilter())
                 .addFilterBefore(jsonLoginRequestFilter(), UsernamePasswordAuthenticationFilter.class)
                 .logout(config -> config.logoutUrl("/api/auth/logout"))
                 .build();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin(envProperties.getClientUrl());
+        config.addAllowedHeader("*");           // 모든 header에 응답 허용
+        config.addAllowedMethod("*");           // 모든 post,get,put,delete,patch 요청허용
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
     }
 
     @Bean
