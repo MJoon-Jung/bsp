@@ -35,16 +35,11 @@ public class Image {
     }
 
     public static Image from(MultipartFile imageFile, String url) {
-        String filenameExtension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
-        FileType fileType = FileType.valueOf(filenameExtension);
-        System.out.println("filenameExtension = " + filenameExtension);
-        System.out.println("fileType = " + fileType);
-
         return Image.builder()
                 .url(url)
                 .fileName(imageFile.getOriginalFilename())
                 .fileSize(imageFile.getSize())
-                .fileType(fileType)
+                .fileType(FileType.valueOf(StringUtils.getFilenameExtension(imageFile.getOriginalFilename())))
                 .build();
     }
 }
