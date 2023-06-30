@@ -1,28 +1,28 @@
 package com.lost.image.controller.response;
 
-import com.lost.image.domain.Image;
+import com.lost.image.domain.ImagePost;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class ImageResponse {
 
-    private Long id;
-    private String url;
-    private String fileName;
+    private final String url;
+    private final String fileName;
+    private final String originalFileName;
 
     @Builder
-    public ImageResponse(Long id, String url, String fileName) {
-        this.id = id;
+    public ImageResponse(String url, String fileName, String originalFileName) {
         this.url = url;
         this.fileName = fileName;
+        this.originalFileName = originalFileName;
     }
 
-    public static ImageResponse from(Image image) {
+    public static ImageResponse from(ImagePost image) {
         return ImageResponse.builder()
-                .id(image.getId())
                 .url(image.getUrl())
                 .fileName(image.getFileName())
+                .originalFileName(image.getOriginalFileName())
                 .build();
     }
 }

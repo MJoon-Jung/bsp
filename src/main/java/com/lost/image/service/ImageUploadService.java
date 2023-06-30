@@ -3,7 +3,7 @@ package com.lost.image.service;
 import com.lost.common.domain.StorageProperties.ImageConfig;
 import com.lost.common.domain.exception.StorageException;
 import com.lost.image.domain.FileType;
-import com.lost.image.domain.Image;
+import com.lost.image.domain.ImagePost;
 import com.lost.image.service.repository.ImagePostRepository;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @Service
 @Transactional
-public class ImageService {
+public class ImageUploadService {
 
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSSSS");
     private static final String URL_FORMAT = "%s/%s";
@@ -31,17 +31,17 @@ public class ImageService {
     private final ImagePostRepository imagePostRepository;
     private final Path rootLocation;
 
-    public ImageService(ImageConfig imageConfig, ImagePostRepository imagePostRepository) {
+    public ImageUploadService(ImageConfig imageConfig, ImagePostRepository imagePostRepository) {
         this.imageConfig = imageConfig;
         this.imagePostRepository = imagePostRepository;
         this.rootLocation = Paths.get(imageConfig.getRootLocation());
     }
 
-    public List<Image> store(List<MultipartFile> images) {
+    public List<ImagePost> store(List<MultipartFile> images) {
         return images.stream().map(this::store).toList();
     }
 
-    public Image store(MultipartFile imageFile) {
+    public ImagePost store(MultipartFile imageFile) {
         try {
             if (imageFile.isEmpty()) {
                 throw new StorageException("빈 파일을 저장할 수 없습니다.");
@@ -53,9 +53,10 @@ public class ImageService {
             String filenameExtension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
             FileType fileType = FileType.valueOf(filenameExtension);
 
-            Image image = Image.builder()
+            ImagePost image = ImagePost.builder()
                     .url(getImageUrl(imageName))
                     .fileName(imageFile.getOriginalFilename())
+                    .originalFileName(imageFile.getOriginalFilename())
                     .fileSize(imageFile.getSize())
                     .fileType(fileType)
                     .build();

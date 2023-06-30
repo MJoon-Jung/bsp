@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.lost.common.domain.exception.ResourceNotFoundException;
 import com.lost.fake.TestContainer;
 import com.lost.image.domain.FileType;
-import com.lost.image.domain.Image;
+import com.lost.image.domain.ImagePost;
 import com.lost.post.controller.request.PostCreateRequest;
 import com.lost.post.domain.Address;
 import com.lost.post.domain.Post;
@@ -73,9 +73,10 @@ class PostCreateServiceTest {
     @DisplayName("게시글 생성 성공 - 이미지 첨부 O")
     void create2() {
         //given
-        Image image = Image.builder()
+        ImagePost image = ImagePost.builder()
                 .url("https://example.com/image.jpg")
-                .fileName("airpods.jpg")
+                .fileName("123123airpods.jpg")
+                .originalFileName("airpods.jpg")
                 .fileSize(1000L)
                 .fileType(FileType.JPG)
                 .build();
@@ -115,7 +116,8 @@ class PostCreateServiceTest {
                 () -> assertThat(post.getLostItem().getAddress().getLongitude()).isEqualTo(126.123456),
                 () -> assertThat(post.getLostItem().getAddress().getStreet()).isEqualTo("서울시 광진구 자양동 123-123"),
                 () -> assertThat(post.getLostItem().getImages().size()).isEqualTo(1),
-                () -> assertThat(post.getLostItem().getImages().get(0).getFileName()).isEqualTo("airpods.jpg")
+                () -> assertThat(post.getLostItem().getImages().get(0).getFileName()).isEqualTo("123123airpods.jpg"),
+                () -> assertThat(post.getLostItem().getImages().get(0).getOriginalFileName()).isEqualTo("airpods.jpg")
         );
     }
 

@@ -1,7 +1,7 @@
 package com.lost.post.service;
 
 import com.lost.common.domain.exception.ResourceNotFoundException;
-import com.lost.image.domain.Image;
+import com.lost.image.domain.ImagePost;
 import com.lost.image.service.repository.ImagePostRepository;
 import com.lost.post.controller.request.PostCreateRequest;
 import com.lost.post.domain.Post;
@@ -30,7 +30,7 @@ public class PostCreateService {
             return postRepository.save(Post.from(postCreateRequest, user));
         }
 
-        List<Image> images = postCreateRequest.getImages().stream()
+        List<ImagePost> images = postCreateRequest.getImages().stream()
                 .map(imageId -> imagePostRepository.findById(imageId)
                         .orElseThrow(() -> new ResourceNotFoundException("IMAGE", imageId))
                 ).toList();
