@@ -1,6 +1,6 @@
 package com.lost.image.infra.entity;
 
-import com.lost.image.domain.ImagePost;
+import com.lost.image.domain.Image;
 import com.lost.post.infra.entity.PostJpaEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,27 +21,23 @@ public class ImagePostJpaEntity extends ImageJpaEntity {
     @JoinColumn(name = "POST_ID")
     private PostJpaEntity postJpaEntity;
 
-    public ImagePost toModel() {
-        return ImagePost.builder()
+    public Image toModel() {
+        return Image.builder()
                 .id(getId())
                 .url(getUrl())
                 .fileName(getFileName())
                 .originalFileName(getOriginalFileName())
-                .fileSize(getFileSize())
-                .fileType(getFileType())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
                 .build();
     }
 
-    public static ImagePostJpaEntity from(ImagePost image, PostJpaEntity postJpaEntity) {
+    public static ImagePostJpaEntity from(Image image, PostJpaEntity postJpaEntity) {
         ImagePostJpaEntity imagePostJpaEntity = new ImagePostJpaEntity();
         imagePostJpaEntity.setId(image.getId());
         imagePostJpaEntity.setUrl(image.getUrl());
         imagePostJpaEntity.setFileName(image.getFileName());
         imagePostJpaEntity.setOriginalFileName(image.getOriginalFileName());
-        imagePostJpaEntity.setFileSize(image.getFileSize());
-        imagePostJpaEntity.setFileType(image.getFileType());
         imagePostJpaEntity.setCreatedAt(image.getCreatedAt());
         imagePostJpaEntity.setUpdatedAt(image.getUpdatedAt());
         imagePostJpaEntity.postJpaEntity = postJpaEntity;

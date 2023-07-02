@@ -18,5 +18,6 @@ public class StorageProperties {
 
         private final String rootLocation;
         private final String baseUrl;
+        private final String resourcePath;
     }
 }

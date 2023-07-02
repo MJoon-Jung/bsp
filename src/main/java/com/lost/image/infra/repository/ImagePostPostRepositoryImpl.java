@@ -1,6 +1,6 @@
 package com.lost.image.infra.repository;
 
-import com.lost.image.domain.ImagePost;
+import com.lost.image.domain.Image;
 import com.lost.image.infra.entity.ImagePostJpaEntity;
 import com.lost.image.service.repository.ImagePostRepository;
 import java.util.List;
@@ -15,12 +15,12 @@ public class ImagePostPostRepositoryImpl implements ImagePostRepository {
     private final ImagePostJpaRepository imagePostJpaRepository;
 
     @Override
-    public ImagePost save(ImagePost image) {
+    public Image save(Image image) {
         return imagePostJpaRepository.save(ImagePostJpaEntity.from(image, null)).toModel();
     }
 
     @Override
-    public Optional<ImagePost> findById(Long imageId) {
+    public Optional<Image> findById(Long imageId) {
         return imagePostJpaRepository.findById(imageId).map(ImagePostJpaEntity::toModel);
     }
 

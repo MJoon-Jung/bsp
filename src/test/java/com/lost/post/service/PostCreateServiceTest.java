@@ -3,11 +3,14 @@ package com.lost.post.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.BDDMockito.given;
 
 import com.lost.common.domain.exception.ResourceNotFoundException;
 import com.lost.fake.TestContainer;
-import com.lost.image.domain.FileType;
-import com.lost.image.domain.ImagePost;
+import com.lost.image.domain.Image;
+import com.lost.image.infra.ResourceFinder;
+import com.lost.post.controller.request.ImageCreate;
+import com.lost.post.controller.request.ImageCreateRequest;
 import com.lost.post.controller.request.PostCreateRequest;
 import com.lost.post.domain.Address;
 import com.lost.post.domain.Post;
@@ -17,6 +20,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class PostCreateServiceTest {
 
@@ -26,8 +30,12 @@ class PostCreateServiceTest {
     @BeforeEach
     void setUp() {
         testContainer = new TestContainer();
-        postCreateService = new PostCreateService(testContainer.postRepository,
-                testContainer.imagePostRepository, testContainer.userRepository);
+        postCreateService = new PostCreateService(
+                testContainer.postRepository,
+                testContainer.imagePostRepository,
+                testContainer.userRepository,
+                testContainer.imageConfig
+        );
     }
 
     @Test
@@ -55,7 +63,7 @@ class PostCreateServiceTest {
                         .build())
                 .build();
         //when
-        Post post = postCreateService.create(postCreateRequest, user.getId());
+        Post post = postCreateService.create(user.getId(), postCreateRequest);
         //then
         assertAll(
                 () -> assertThat(post.getTitle()).isEqualTo("This is new title"),
@@ -73,12 +81,10 @@ class PostCreateServiceTest {
     @DisplayName("게시글 생성 성공 - 이미지 첨부 O")
     void create2() {
         //given
-        ImagePost image = ImagePost.builder()
+        Image image = Image.builder()
                 .url("https://example.com/image.jpg")
                 .fileName("123123airpods.jpg")
                 .originalFileName("airpods.jpg")
-                .fileSize(1000L)
-                .fileType(FileType.JPG)
                 .build();
         testContainer.imagePostRepository.save(image);
 
@@ -89,6 +95,21 @@ class PostCreateServiceTest {
                 .password("password")
                 .build();
         testContainer.userRepository.save(user);
+        ImageCreate imageCreate = ImageCreate.builder()
+                .url("http://localhost:8080/images/upload/abcdef_abc.jpg")
+                .originalFileName("abc.jpg")
+                .fileName("abcdef_abc.jpg")
+                .build();
+        ImageCreate imageCreate2 = ImageCreate.builder()
+                .url("http://localhost:8080/images/upload/abcdef2_bac.jpg")
+                .originalFileName("abc.jpg")
+                .fileName("abcdef_abc.jpg")
+                .build();
+        ImageCreate imageCreate3 = ImageCreate.builder()
+                .url("http://localhost:8080/images/upload/abcdef3_cab.jpg")
+                .originalFileName("abc.jpg")
+                .fileName("abcdef_abc.jpg")
+                .build();
 
         PostCreateRequest postCreateRequest = PostCreateRequest.builder()
                 .title("This is new title")
@@ -96,7 +117,9 @@ class PostCreateServiceTest {
                 .tradeType(TradeType.DIRECT)
                 .reward(1_000)
                 .itemName("airpods")
-                .images(List.of(1L))
+                .imageCreateRequest(ImageCreateRequest.builder()
+                        .imageCreate(List.of(imageCreate, imageCreate2, imageCreate3))
+                        .build())
                 .address(Address.builder()
                         .latitude(38.123456)
                         .longitude(126.123456)
@@ -104,7 +127,10 @@ class PostCreateServiceTest {
                         .build())
                 .build();
         //when
-        Post post = postCreateService.create(postCreateRequest, user.getId());
+        ResourceFinder resourceFinder = Mockito.mock(ResourceFinder.class);
+        given(resourceFinder.find("images/upload/abcdef", "abc.jpg"))
+                .willReturn(null);
+        Post post = postCreateService.create(user.getId(), postCreateRequest);
         //then
         assertAll(
                 () -> assertThat(post.getTitle()).isEqualTo("This is new title"),
@@ -115,9 +141,9 @@ class PostCreateServiceTest {
                 () -> assertThat(post.getLostItem().getAddress().getLatitude()).isEqualTo(38.123456),
                 () -> assertThat(post.getLostItem().getAddress().getLongitude()).isEqualTo(126.123456),
                 () -> assertThat(post.getLostItem().getAddress().getStreet()).isEqualTo("서울시 광진구 자양동 123-123"),
-                () -> assertThat(post.getLostItem().getImages().size()).isEqualTo(1),
-                () -> assertThat(post.getLostItem().getImages().get(0).getFileName()).isEqualTo("123123airpods.jpg"),
-                () -> assertThat(post.getLostItem().getImages().get(0).getOriginalFileName()).isEqualTo("airpods.jpg")
+                () -> assertThat(post.getLostItem().getImages().size()).isEqualTo(3),
+                () -> assertThat(post.getLostItem().getImages().get(0).getFileName()).isEqualTo("abcdef_abc.jpg"),
+                () -> assertThat(post.getLostItem().getImages().get(0).getOriginalFileName()).isEqualTo("abc.jpg")
         );
     }
 
@@ -138,7 +164,7 @@ class PostCreateServiceTest {
                         .build())
                 .build();
         //when
-        assertThatThrownBy(() -> postCreateService.create(postCreateRequest, 1L))
+        assertThatThrownBy(() -> postCreateService.create(1L, postCreateRequest))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
@@ -153,6 +179,21 @@ class PostCreateServiceTest {
                 .password("password")
                 .build();
         testContainer.userRepository.save(user);
+        ImageCreate imageCreate = ImageCreate.builder()
+                .url("http://localhost:8080/images/upload/abcdef_abc.jpg")
+                .originalFileName("abc.jpg")
+                .fileName("abcdef_abc.jpg")
+                .build();
+        ImageCreate imageCreate2 = ImageCreate.builder()
+                .url("http://localhost:8080/images/upload/abcdef2_bac.jpg")
+                .originalFileName("abc.jpg")
+                .fileName("abcdef_abc.jpg")
+                .build();
+        ImageCreate imageCreate3 = ImageCreate.builder()
+                .url("http://localhost:8080/images/upload/abcdef3_cab.jpg")
+                .originalFileName("abc.jpg")
+                .fileName("abcdef_abc.jpg")
+                .build();
 
         PostCreateRequest postCreateRequest = PostCreateRequest.builder()
                 .title("This is new title")
@@ -160,7 +201,9 @@ class PostCreateServiceTest {
                 .tradeType(TradeType.DIRECT)
                 .reward(1_000)
                 .itemName("airpods")
-                .images(List.of(1L, 2L, 3L))
+                .imageCreateRequest(ImageCreateRequest.builder()
+                        .imageCreate(List.of(imageCreate, imageCreate2, imageCreate3))
+                        .build())
                 .address(Address.builder()
                         .latitude(38.123456)
                         .longitude(126.123456)
@@ -168,7 +211,7 @@ class PostCreateServiceTest {
                         .build())
                 .build();
         //when
-        assertThatThrownBy(() -> postCreateService.create(postCreateRequest, 1L))
+        assertThatThrownBy(() -> postCreateService.create(1L, postCreateRequest))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 }

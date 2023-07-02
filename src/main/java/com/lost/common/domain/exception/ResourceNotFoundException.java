@@ -2,7 +2,7 @@ package com.lost.common.domain.exception;
 
 public class ResourceNotFoundException extends LostBusinessException {
 
-    private static final String MESSAGE = "%s에서 %s %s를 찾을 수 없습니다.";
+    private static final String MESSAGE = "[%s]: %s %s를 찾을 수 없습니다.";
 
     public ResourceNotFoundException(String datasource, Long id) {
         super(String.format(MESSAGE, datasource, "ID", id));

@@ -1,6 +1,7 @@
 package com.lost.image.controller.response;
 
-import com.lost.image.domain.ImagePost;
+import com.lost.image.domain.Image;
+import com.lost.image.infra.ImageFile;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,10 +19,18 @@ public class ImageResponse {
         this.originalFileName = originalFileName;
     }
 
-    public static ImageResponse from(ImagePost image) {
+    public static ImageResponse from(Image image) {
         return ImageResponse.builder()
                 .url(image.getUrl())
                 .fileName(image.getFileName())
+                .originalFileName(image.getOriginalFileName())
+                .build();
+    }
+
+    public static ImageResponse from(ImageFile image) {
+        return ImageResponse.builder()
+                .url(image.getImageUrl())
+                .fileName(image.getImageName())
                 .originalFileName(image.getOriginalFileName())
                 .build();
     }

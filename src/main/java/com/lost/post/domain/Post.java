@@ -1,11 +1,10 @@
 package com.lost.post.domain;
 
 import com.lost.common.domain.exception.UnauthorizedException;
-import com.lost.image.domain.ImagePost;
+import com.lost.post.controller.request.ImageCreateRequest;
 import com.lost.post.controller.request.PostCreateRequest;
 import com.lost.user.domain.User;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -76,7 +75,7 @@ public class Post {
                 .build();
     }
 
-    public static Post from(PostCreateRequest postCreateRequest, User user, List<ImagePost> images) {
+    public static Post from(PostCreateRequest postCreateRequest, User user, ImageCreateRequest imageCreateRequest) {
         return Post.builder()
                 .title(postCreateRequest.getTitle())
                 .content(postCreateRequest.getContent())
@@ -86,7 +85,7 @@ public class Post {
                 .lostItem(LostItem.builder()
                         .name(postCreateRequest.getItemName())
                         .address(postCreateRequest.getAddress())
-                        .images(images)
+                        .images(imageCreateRequest.toModel())
                         .build())
                 .status(PostStatus.PENDING)
                 .build();

@@ -1,9 +1,6 @@
 package com.lost.image.infra.entity;
 
 import com.lost.common.infra.entity.BaseTimeJpaEntity;
-import com.lost.image.domain.FileType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +20,4 @@ public abstract class ImageJpaEntity extends BaseTimeJpaEntity {
     private String url;
     private String fileName;
     private String originalFileName;
-    private Long fileSize;
-    @Enumerated(EnumType.STRING)
-    private FileType fileType;
 }

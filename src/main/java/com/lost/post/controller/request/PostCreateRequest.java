@@ -1,11 +1,11 @@
 package com.lost.post.controller.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lost.post.domain.Address;
 import com.lost.post.domain.TradeType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,17 +26,19 @@ public class PostCreateRequest {
     private String itemName;
     @Valid
     private Address address;
-    private List<Long> images;
+    @Valid
+    @JsonProperty("images")
+    private ImageCreateRequest imageCreateRequest;
 
     @Builder
     public PostCreateRequest(String title, String content, TradeType tradeType, Integer reward, String itemName,
-            Address address, List<Long> images) {
+            Address address, ImageCreateRequest imageCreateRequest) {
         this.title = title;
         this.content = content;
         this.tradeType = tradeType;
         this.reward = reward;
         this.itemName = itemName;
         this.address = address;
-        this.images = images;
+        this.imageCreateRequest = imageCreateRequest;
     }
 }

@@ -1,7 +1,6 @@
 package com.lost.image.controller;
 
 import com.lost.image.controller.response.ImageResponse;
-import com.lost.image.domain.ImagePost;
 import com.lost.image.service.ImageUploadService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +22,7 @@ public class ImageUploadController {
     @PostMapping("/api/posts/images")
     public ResponseEntity<List<ImageResponse>> handleFileUpload(
             @RequestParam("image") List<MultipartFile> imageFiles) {
-        List<ImagePost> images = imageUploadService.store(imageFiles);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(images.stream().map(ImageResponse::from).toList());
+                .body(imageUploadService.store(imageFiles));
     }
 }
