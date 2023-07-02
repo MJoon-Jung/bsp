@@ -1,15 +1,14 @@
 package com.lost.image.service.repository;
 
-import com.lost.image.domain.Image;
-import com.lost.image.infra.entity.ImagePostJpaEntity;
+import com.lost.image.domain.PostImage;
 import java.util.List;
 import java.util.Optional;
 
 public interface ImagePostRepository {
 
-    Image save(Image image);
+    PostImage save(PostImage image);
 
-    Optional<Image> findById(Long imageId);
+    Optional<PostImage> findById(Long imageId);
 
-    List<ImagePostJpaEntity> saveAll(List<ImagePostJpaEntity> imagePostJpaEntities);
+    List<PostImage> saveAll(List<PostImage> postImageJpaEntities);
 }

@@ -1,6 +1,5 @@
 package com.lost.security.userdetails;
 
-import com.lost.user.domain.User;
 import com.lost.user.service.repostiory.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

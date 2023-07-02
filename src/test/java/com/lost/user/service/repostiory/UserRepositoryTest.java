@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.lost.user.domain.User;
 import com.lost.user.domain.UserRole;
-import com.lost.user.infra.entity.UserJpaEntity;
 import com.lost.user.infra.repository.UserJpaRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -34,12 +33,12 @@ class UserRepositoryTest {
                 .role(UserRole.MEMBER)
                 .build();
 
-        userRepository.save(UserJpaEntity.from(user));
+        userRepository.save(User.from(user));
         //when
-        Optional<UserJpaEntity> maybeUser = userRepository.findByEmail("example@email.com");
+        Optional<User> maybeUser = userRepository.findByEmail("example@email.com");
         //then
         assertThat(maybeUser).isPresent();
-        UserJpaEntity findUser = maybeUser.get();
+        User findUser = maybeUser.get();
         assertAll(
                 () -> assertThat(findUser.getId()).isNotNull(),
                 () -> assertThat(findUser.getEmail()).isEqualTo("example@email.com"),
@@ -59,12 +58,12 @@ class UserRepositoryTest {
                 .role(UserRole.MEMBER)
                 .build();
 
-        userRepository.save(UserJpaEntity.from(user));
+        userRepository.save(User.from(user));
         //when
-        Optional<UserJpaEntity> maybeUser = userRepository.findByNickname("example");
+        Optional<User> maybeUser = userRepository.findByNickname("example");
         //then
         assertThat(maybeUser).isPresent();
-        UserJpaEntity findUser = maybeUser.get();
+        User findUser = maybeUser.get();
         assertAll(
                 () -> assertThat(findUser.getId()).isNotNull(),
                 () -> assertThat(findUser.getEmail()).isEqualTo("example@email.com"),

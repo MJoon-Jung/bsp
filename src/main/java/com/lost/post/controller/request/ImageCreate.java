@@ -1,6 +1,5 @@
 package com.lost.post.controller.request;
 
-import com.lost.image.domain.Image;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;

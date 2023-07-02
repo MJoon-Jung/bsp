@@ -1,12 +1,12 @@
 package com.lost.user.infra.repository;
 
-import com.lost.user.infra.entity.UserJpaEntity;
+import com.lost.user.domain.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserJpaRepository extends JpaRepository<UserJpaEntity, Long> {
+public interface UserJpaRepository extends JpaRepository<User, Long> {
 
-    Optional<UserJpaEntity> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    Optional<UserJpaEntity> findByNickname(String nickname);
+    Optional<User> findByNickname(String nickname);
 }

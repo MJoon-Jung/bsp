@@ -1,7 +1,6 @@
 package com.lost.user.service;
 
 import com.lost.common.domain.exception.ResourceNotFoundException;
-import com.lost.user.domain.User;
 import com.lost.user.service.repostiory.UserRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

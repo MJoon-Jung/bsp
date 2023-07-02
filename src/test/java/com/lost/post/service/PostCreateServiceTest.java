@@ -1,21 +1,17 @@
 package com.lost.post.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 
 import com.lost.common.domain.exception.ResourceNotFoundException;
 import com.lost.fake.TestContainer;
-import com.lost.image.domain.Image;
 import com.lost.image.infra.ResourceFinder;
 import com.lost.post.controller.request.ImageCreate;
 import com.lost.post.controller.request.ImageCreateRequest;
 import com.lost.post.controller.request.PostCreateRequest;
 import com.lost.post.domain.Address;
-import com.lost.post.domain.Post;
 import com.lost.post.domain.TradeType;
-import com.lost.user.domain.User;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

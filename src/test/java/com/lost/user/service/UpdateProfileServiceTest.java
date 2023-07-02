@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.lost.fake.TestContainer;
 import com.lost.user.controller.request.UpdateProfileRequest;
-import com.lost.user.domain.User;
 import com.lost.user.domain.UserRole;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;

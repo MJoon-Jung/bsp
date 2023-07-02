@@ -3,7 +3,6 @@ package com.lost.post.controller.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.lost.image.domain.Image;
 import jakarta.validation.Valid;
 import java.util.Collections;
 import java.util.List;

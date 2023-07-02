@@ -1,7 +1,6 @@
 package com.lost.post.controller.response;
 
 import com.lost.post.domain.LostItem;
-import com.lost.post.domain.Post;
 import com.lost.post.domain.PostStatus;
 import com.lost.post.domain.TradeType;
 import com.lost.user.controller.response.WriterResponse;

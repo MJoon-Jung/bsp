@@ -1,6 +1,5 @@
 package com.lost.post.domain;
 
-import com.lost.image.domain.Image;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;

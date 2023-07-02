@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.lost.fake.TestContainer;
 import com.lost.user.controller.request.SignUpRequest;
-import com.lost.user.domain.User;
 import com.lost.user.service.UserSignUpService;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;

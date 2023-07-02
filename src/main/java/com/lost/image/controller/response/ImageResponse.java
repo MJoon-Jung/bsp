@@ -1,6 +1,5 @@
 package com.lost.image.controller.response;
 
-import com.lost.image.domain.Image;
 import com.lost.image.infra.ImageFile;
 import lombok.Builder;
 import lombok.Getter;

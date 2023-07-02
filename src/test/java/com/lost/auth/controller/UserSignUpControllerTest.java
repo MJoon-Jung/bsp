@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lost.user.controller.request.SignUpRequest;
-import com.lost.user.domain.User;
 import com.lost.user.service.repostiory.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;

@@ -1,6 +1,5 @@
 package com.lost.post.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -8,10 +7,8 @@ import com.lost.common.domain.exception.ResourceNotFoundException;
 import com.lost.fake.TestContainer;
 import com.lost.post.domain.Address;
 import com.lost.post.domain.LostItem;
-import com.lost.post.domain.Post;
 import com.lost.post.domain.PostStatus;
 import com.lost.post.domain.TradeType;
-import com.lost.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

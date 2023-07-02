@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lost.common.domain.exception.ResourceNotFoundException;
 import com.lost.security.userdetails.UserPrincipal;
 import com.lost.user.controller.response.UserResponse;
-import com.lost.user.domain.User;
 import com.lost.user.service.repostiory.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

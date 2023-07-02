@@ -17,7 +17,6 @@ import com.lost.post.domain.PostStatus;
 import com.lost.post.domain.TradeType;
 import com.lost.post.service.repository.PostRepository;
 import com.lost.security.userdetails.UserPrincipal;
-import com.lost.user.domain.User;
 import java.io.FileInputStream;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

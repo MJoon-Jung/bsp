@@ -2,7 +2,6 @@ package com.lost.post.infra.repository;
 
 import com.lost.image.service.repository.ImagePostRepository;
 import com.lost.post.domain.Post;
-import com.lost.post.infra.entity.PostJpaEntity;
 import com.lost.post.service.repository.PostRepository;
 import com.lost.user.service.repostiory.UserRepository;
 import java.util.Optional;
@@ -19,14 +18,14 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post save(Post post) {
-        PostJpaEntity entity = postJpaRepository.save(PostJpaEntity.from(post));
-        imagePostRepository.saveAll(entity.getImagePostJpaEntities());
-        userRepository.save(entity.getUserJpaEntity());
+        Post entity = postJpaRepository.save(Post.from(post));
+        imagePostRepository.saveAll(entity.getPostImageJpaEntities());
+        userRepository.save(entity.getUser());
         return entity.toModel();
     }
 
     @Override
     public Optional<Post> findById(Long postId) {
-        return postJpaRepository.findById(postId).map(PostJpaEntity::toModel);
+        return postJpaRepository.findById(postId).map(Post::toModel);
     }
 }

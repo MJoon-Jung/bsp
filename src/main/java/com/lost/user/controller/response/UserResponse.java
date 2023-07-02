@@ -1,7 +1,5 @@
 package com.lost.user.controller.response;
 
-import com.lost.post.domain.Post;
-import com.lost.user.domain.User;
 import com.lost.user.domain.UserRole;
 import java.time.LocalDateTime;
 import java.util.List;

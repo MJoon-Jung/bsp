@@ -1,40 +1,37 @@
 package com.lost.user.domain;
 
-import com.lost.post.domain.Post;
-import com.lost.user.controller.request.SignUpRequest;
+import com.lost.common.infra.entity.BaseTimeJpaEntity;
 import com.lost.user.controller.request.UpdateProfileRequest;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import lombok.Builder;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "UQ_USER_EMAIL", columnNames = {"email"}),
+        @UniqueConstraint(name = "UQ_USER_NICKNAME", columnNames = {"nickname"})
+}, name = "USER")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class User {
+@Entity
+public class User extends BaseTimeJpaEntity {
 
-    private final Long id;
-    private final String email;
-    private final String nickname;
-    private final String password;
-    private final UserRole role;
-    private final List<Post> posts;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
-
-    @Builder(toBuilder = true)
-    public User(Long id, String email, String nickname, String password, UserRole role, List<Post> posts,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt) {
-        this.id = id;
-        this.email = email;
-        this.nickname = nickname;
-        this.password = password;
-        this.role = role;
-        this.posts = posts;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String email;
+    private String nickname;
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     public User encryptPassword(PasswordEncoder passwordEncoder) {
         return this.toBuilder()
@@ -51,31 +48,5 @@ public class User {
 
     public boolean equalsToPlainPassword(String plainPassword, PasswordEncoder passwordEncoder) {
         return passwordEncoder.matches(plainPassword, password);
-    }
-
-    public static User from(SignUpRequest signUpRequest) {
-        return User.builder()
-                .email(signUpRequest.getEmail())
-                .nickname(signUpRequest.getNickname())
-                .password(signUpRequest.getPassword())
-                .role(UserRole.MEMBER)
-                .build();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        User user = (User) o;
-        return Objects.equals(id, user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

@@ -1,44 +1,55 @@
 package com.lost.post.domain;
 
 import com.lost.common.domain.exception.UnauthorizedException;
-import com.lost.post.controller.request.ImageCreateRequest;
-import com.lost.post.controller.request.PostCreateRequest;
+import com.lost.common.infra.entity.BaseTimeJpaEntity;
+import com.lost.image.domain.PostImage;
 import com.lost.user.domain.User;
-import java.time.LocalDateTime;
-import lombok.Builder;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Post {
+@Table(name = "POST")
+@Entity
+public class Post extends BaseTimeJpaEntity {
 
-    private final Long id;
-    private final String title;
-    private final String content;
-    private final Integer reward;
-    private final TradeType tradeType;
-    private final User writer;
-    private final LostItem lostItem;
-    private final PostStatus status;
-    private final User finder;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
-
-    @Builder(toBuilder = true)
-    public Post(Long id, String title, String content, Integer reward, TradeType tradeType, User writer,
-            LostItem lostItem,
-            PostStatus status, User finder, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.reward = reward;
-        this.tradeType = tradeType;
-        this.writer = writer;
-        this.lostItem = lostItem;
-        this.status = status;
-        this.finder = finder;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String title;
+    private String content;
+    private Integer reward;
+    private String itemName;
+    @Embedded
+    private Address address;
+    @Enumerated(EnumType.STRING)
+    private PostStatus status;
+    @Enumerated(EnumType.STRING)
+    private TradeType tradeType;
+    @OneToMany(mappedBy = "post")
+    private List<PostImage> postImageJpaEntities = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FINDER_ID")
+    private User finder;
 
     public Post update(final String title, final String content, final TradeType tradeType, final LostItem lostItem,
             final User user) {
@@ -57,37 +68,6 @@ public class Post {
         return this.toBuilder()
                 .status(status)
                 .finder(findUser)
-                .build();
-    }
-
-    public static Post from(PostCreateRequest postCreateRequest, User user) {
-        return Post.builder()
-                .title(postCreateRequest.getTitle())
-                .content(postCreateRequest.getContent())
-                .reward(postCreateRequest.getReward())
-                .tradeType(postCreateRequest.getTradeType())
-                .writer(user)
-                .lostItem(LostItem.builder()
-                        .name(postCreateRequest.getItemName())
-                        .address(postCreateRequest.getAddress())
-                        .build())
-                .status(PostStatus.PENDING)
-                .build();
-    }
-
-    public static Post from(PostCreateRequest postCreateRequest, User user, ImageCreateRequest imageCreateRequest) {
-        return Post.builder()
-                .title(postCreateRequest.getTitle())
-                .content(postCreateRequest.getContent())
-                .reward(postCreateRequest.getReward())
-                .tradeType(postCreateRequest.getTradeType())
-                .writer(user)
-                .lostItem(LostItem.builder()
-                        .name(postCreateRequest.getItemName())
-                        .address(postCreateRequest.getAddress())
-                        .images(imageCreateRequest.toModel())
-                        .build())
-                .status(PostStatus.PENDING)
                 .build();
     }
 }

@@ -1,6 +1,5 @@
 package com.lost.user.controller.response;
 
-import com.lost.user.domain.User;
 import com.lost.user.domain.UserRole;
 import java.time.LocalDateTime;
 import lombok.Builder;

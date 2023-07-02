@@ -2,7 +2,6 @@ package com.lost.post.controller;
 
 import com.lost.post.controller.request.PostCreateRequest;
 import com.lost.post.controller.response.PostResponse;
-import com.lost.post.domain.Post;
 import com.lost.post.service.PostCreateService;
 import com.lost.security.userdetails.UserPrincipal;
 import lombok.RequiredArgsConstructor;

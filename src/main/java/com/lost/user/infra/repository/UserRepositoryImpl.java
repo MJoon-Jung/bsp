@@ -1,7 +1,6 @@
 package com.lost.user.infra.repository;
 
 import com.lost.user.domain.User;
-import com.lost.user.infra.entity.UserJpaEntity;
 import com.lost.user.service.repostiory.UserRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -15,26 +14,26 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return userJpaRepository.findByEmail(email).map(UserJpaEntity::toModel);
+        return userJpaRepository.findByEmail(email).map(User::toModel);
     }
 
     @Override
     public User save(User user) {
-        return userJpaRepository.save(UserJpaEntity.from(user)).toModel();
+        return userJpaRepository.save(User.from(user)).toModel();
     }
 
     @Override
     public Optional<User> findById(Long userId) {
-        return userJpaRepository.findById(userId).map(UserJpaEntity::toModel);
+        return userJpaRepository.findById(userId).map(User::toModel);
     }
 
     @Override
     public Optional<User> findByNickname(String nickname) {
-        return userJpaRepository.findByNickname(nickname).map(UserJpaEntity::toModel);
+        return userJpaRepository.findByNickname(nickname).map(User::toModel);
     }
 
     @Override
-    public UserJpaEntity save(UserJpaEntity userJpaEntity) {
-        return userJpaRepository.save(userJpaEntity);
+    public User save(User user) {
+        return userJpaRepository.save(user);
     }
 }
