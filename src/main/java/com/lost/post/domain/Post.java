@@ -3,6 +3,8 @@ package com.lost.post.domain;
 import com.lost.common.domain.exception.UnauthorizedException;
 import com.lost.common.infra.entity.BaseTimeJpaEntity;
 import com.lost.image.domain.PostImage;
+import com.lost.post.controller.request.ImageCreateRequest;
+import com.lost.post.controller.request.PostUpdateRequest;
 import com.lost.user.domain.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
@@ -74,9 +76,22 @@ public class Post extends BaseTimeJpaEntity {
         this.finder = finder;
     }
 
-    public void update(Long userId) {
-        if (Objects.equals(user.getId(), userId)) {
+    public void update(PostUpdateRequest postUpdateRequest, Long userId) {
+        if (!getUser().getId().equals(userId)) {
             throw new UnauthorizedException();
+        }
+
+        title = postUpdateRequest.getTitle();
+        content = postUpdateRequest.getContent();
+        reward = postUpdateRequest.getReward();
+        itemName = postUpdateRequest.getItemName();
+        address = postUpdateRequest.getAddress();
+        tradeType = postUpdateRequest.getTradeType();
+
+        postImages.clear();
+        ImageCreateRequest imageCreateRequest = postUpdateRequest.getImageCreateRequest();
+        if (!(Objects.isNull(imageCreateRequest) || imageCreateRequest.isEmpty())) {
+            imageCreateRequest.toEntity(this);
         }
     }
 

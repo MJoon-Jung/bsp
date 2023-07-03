@@ -43,4 +43,4 @@ application.properties
 docker-compose-*.yml
 Dockerfile
 http
-public
+uploads
