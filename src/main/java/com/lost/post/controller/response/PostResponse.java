@@ -24,12 +24,13 @@ public class PostResponse {
     private final List<PostImageResponse> images;
     private final PostStatus status;
     private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     @Builder
     public PostResponse(Long id, String title, String content, Integer reward, TradeType tradeType,
             WriterResponse writer,
             String itemName, Address address, List<PostImageResponse> images, PostStatus status,
-            LocalDateTime createdAt) {
+            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -41,6 +42,7 @@ public class PostResponse {
         this.images = images;
         this.status = status;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public static PostResponse from(Post post) {
@@ -56,6 +58,7 @@ public class PostResponse {
                 .images(post.getPostImages().stream().map(PostImageResponse::from).toList())
                 .status(post.getStatus())
                 .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
                 .build();
     }
 }
