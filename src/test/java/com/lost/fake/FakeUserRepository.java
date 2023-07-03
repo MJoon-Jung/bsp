@@ -14,14 +14,6 @@ public class FakeUserRepository implements UserRepository {
     private final List<User> data = new ArrayList<>();
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return data.stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findAny()
-                .map(User::toModel);
-    }
-
-    @Override
     public User save(User user) {
         Long userId = user.getId();
         if (userId == null) {
@@ -31,35 +23,32 @@ public class FakeUserRepository implements UserRepository {
                     .nickname(user.getNickname())
                     .password(user.getPassword())
                     .role(user.getRole())
-                    .createdAt(user.getCreatedAt())
-                    .updatedAt(user.getUpdatedAt())
                     .build();
         } else {
             data.removeIf(item -> Objects.equals(item.getId(), userId));
         }
-        data.add(User.from(user));
+        data.add(user);
         return user;
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return data.stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findAny();
     }
 
     @Override
     public Optional<User> findById(Long userId) {
         return data.stream()
                 .filter(user -> user.getId().equals(userId))
-                .findAny()
-                .map(User::toModel);
+                .findAny();
     }
 
     @Override
     public Optional<User> findByNickname(String nickname) {
         return data.stream()
                 .filter(user -> user.getNickname().equals(nickname))
-                .findAny()
-                .map(User::toModel);
-    }
-
-    @Override
-    public User save(User userJpaEntity) {
-        User user = save(userJpaEntity.toModel());
-        return User.from(user);
+                .findAny();
     }
 }

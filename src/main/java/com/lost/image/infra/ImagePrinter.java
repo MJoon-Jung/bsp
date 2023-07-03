@@ -1,28 +1,33 @@
 package com.lost.image.infra;
 
 import com.lost.common.domain.exception.StorageException;
+import com.lost.image.service.dto.ImageResponse;
 import java.io.IOException;
-import lombok.Builder;
+import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class ImagePrinter {
 
-    private static final DefaultResourceLoader RESOURCE_LOADER = new DefaultResourceLoader();
     private static final String LOAD_IMAGE_FAIL_MESSAGE = "이미지를 불러오지 못했습니다.";
-    private final String imageName;
-    private final Resource resource;
+    public static final String PNG = "PNG";
+    private final ResourceUtil resourceUtil;
 
-    @Builder
-    public ImagePrinter(String imageName, Resource resource) {
-        this.imageName = imageName;
-        this.resource = resource;
+    public ImageResponse print(String imageName) {
+        return ImageResponse.builder()
+                .contentType(getContentType(imageName))
+                .content(getContent(resourceUtil.find(imageName), imageName))
+                .build();
     }
 
-    public byte[] getContent() {
+    private byte[] getContent(Resource resource, String imageName) {
         try {
             return resource.getContentAsByteArray();
         } catch (IOException e) {
@@ -31,8 +36,8 @@ public class ImagePrinter {
         }
     }
 
-    public MediaType getContentType() {
-        String extension = imageName.split("\\.")[1].toLowerCase();
-        return extension.equals("png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
+    private MediaType getContentType(String imageName) {
+        String extension = StringUtils.getFilenameExtension(imageName);
+        return Objects.requireNonNull(extension).equalsIgnoreCase(PNG) ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
     }
 }

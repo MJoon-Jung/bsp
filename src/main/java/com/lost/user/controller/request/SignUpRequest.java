@@ -1,5 +1,7 @@
 package com.lost.user.controller.request;
 
+import com.lost.user.domain.User;
+import com.lost.user.domain.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -28,5 +30,14 @@ public class SignUpRequest {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
+    }
+
+    public User toEntity() {
+        return User.builder()
+                .email(email)
+                .nickname(nickname)
+                .password(password)
+                .role(UserRole.MEMBER)
+                .build();
     }
 }

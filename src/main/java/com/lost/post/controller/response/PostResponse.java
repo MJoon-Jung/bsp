@@ -1,10 +1,12 @@
 package com.lost.post.controller.response;
 
-import com.lost.post.domain.LostItem;
+import com.lost.post.domain.Address;
+import com.lost.post.domain.Post;
 import com.lost.post.domain.PostStatus;
 import com.lost.post.domain.TradeType;
 import com.lost.user.controller.response.WriterResponse;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,21 +19,26 @@ public class PostResponse {
     private final Integer reward;
     private final TradeType tradeType;
     private final WriterResponse writer;
-    private final LostItem lostItem;
+    private final String itemName;
+    private final Address address;
+    private final List<PostImageResponse> images;
     private final PostStatus status;
     private final LocalDateTime createdAt;
 
     @Builder
     public PostResponse(Long id, String title, String content, Integer reward, TradeType tradeType,
             WriterResponse writer,
-            LostItem lostItem, PostStatus status, LocalDateTime createdAt) {
+            String itemName, Address address, List<PostImageResponse> images, PostStatus status,
+            LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.reward = reward;
         this.tradeType = tradeType;
         this.writer = writer;
-        this.lostItem = lostItem;
+        this.itemName = itemName;
+        this.address = address;
+        this.images = images;
         this.status = status;
         this.createdAt = createdAt;
     }
@@ -43,8 +50,10 @@ public class PostResponse {
                 .content(post.getContent())
                 .reward(post.getReward())
                 .tradeType(post.getTradeType())
-                .writer(WriterResponse.from(post.getWriter()))
-                .lostItem(post.getLostItem())
+                .writer(WriterResponse.from(post.getUser()))
+                .itemName(post.getItemName())
+                .address(post.getAddress())
+                .images(post.getPostImages().stream().map(PostImageResponse::from).toList())
                 .status(post.getStatus())
                 .createdAt(post.getCreatedAt())
                 .build();

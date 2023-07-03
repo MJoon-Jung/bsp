@@ -6,6 +6,7 @@ import com.lost.security.filter.JsonLoginRequestFilter;
 import com.lost.security.handler.LoginFailureHandler;
 import com.lost.security.handler.LoginSuccessHandler;
 import com.lost.security.userdetails.UserDetailsServiceImpl;
+import com.lost.user.service.UserService;
 import com.lost.user.service.repostiory.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,7 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final UserService userService;
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
     private final EnvProperties envProperties;
@@ -79,7 +81,7 @@ public class SecurityConfig {
     public JsonLoginRequestFilter jsonLoginRequestFilter() {
         JsonLoginRequestFilter filter = new JsonLoginRequestFilter(objectMapper);
         filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(userRepository, objectMapper));
+        filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(userService, objectMapper));
         filter.setAuthenticationFailureHandler(new LoginFailureHandler(objectMapper));
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
         return filter;

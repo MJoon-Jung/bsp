@@ -1,6 +1,9 @@
 package com.lost.user.controller.response;
 
+import com.lost.post.controller.response.PostResponse;
+import com.lost.user.domain.User;
 import com.lost.user.domain.UserRole;
+import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -13,12 +16,13 @@ public class UserResponse {
     private final String email;
     private final String nickname;
     private final UserRole role;
-    private final List<Post> posts;
+    private final List<PostResponse> posts;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
     @Builder
-    public UserResponse(Long id, String email, String nickname, UserRole role, List<Post> posts,
+    @QueryProjection
+    public UserResponse(Long id, String email, String nickname, UserRole role, List<PostResponse> posts,
             LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.email = email;
@@ -35,7 +39,7 @@ public class UserResponse {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .role(user.getRole())
-                .posts(user.getPosts())
+                .posts(user.getPosts().stream().map(PostResponse::from).toList())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();

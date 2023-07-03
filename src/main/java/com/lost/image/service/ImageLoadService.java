@@ -1,8 +1,7 @@
 package com.lost.image.service;
 
-import com.lost.common.domain.StorageProperties.ImageConfig;
 import com.lost.image.infra.ImagePrinter;
-import com.lost.image.infra.ResourceFinder;
+import com.lost.image.service.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ImageLoadService {
 
-    private final ImageConfig imageConfig;
-    private final ResourceFinder resourceFinder;
+    private final ImagePrinter imagePrinter;
 
-    public ImagePrinter load(String imageName) {
-        return ImagePrinter.builder()
-                .imageName(imageName)
-                .resource(resourceFinder.find(imageConfig.getResourcePath(), imageName))
-                .build();
+    public ImageResponse load(String imageName) {
+        return imagePrinter.print(imageName);
     }
 }

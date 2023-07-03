@@ -2,7 +2,10 @@ package com.lost.post.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lost.post.domain.Address;
+import com.lost.post.domain.Post;
+import com.lost.post.domain.PostStatus;
 import com.lost.post.domain.TradeType;
+import com.lost.user.domain.User;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -40,5 +43,19 @@ public class PostCreateRequest {
         this.itemName = itemName;
         this.address = address;
         this.imageCreateRequest = imageCreateRequest;
+    }
+
+    public Post toEntity(User user) {
+        return Post
+                .builder()
+                .title(title)
+                .content(content)
+                .reward(reward)
+                .itemName(itemName)
+                .address(address)
+                .status(PostStatus.PENDING)
+                .tradeType(tradeType)
+                .user(user)
+                .build();
     }
 }

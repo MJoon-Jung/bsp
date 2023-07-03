@@ -2,6 +2,7 @@ package com.lost.user.service;
 
 import com.lost.common.domain.exception.UserAlreadyExistsException;
 import com.lost.user.controller.request.SignUpRequest;
+import com.lost.user.domain.User;
 import com.lost.user.service.repostiory.UserRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class UserSignUpService {
             throw new UserAlreadyExistsException();
         }
 
-        User user = User.from(signUpRequest);
+        User user = signUpRequest.toEntity();
         user = user.encryptPassword(passwordEncoder);
         userRepository.save(user);
     }

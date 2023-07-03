@@ -1,5 +1,6 @@
 package com.lost.user.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -11,7 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lost.security.userdetails.UserPrincipal;
 import com.lost.user.controller.request.UpdateProfileRequest;
-import com.lost.user.service.repostiory.UserRepository;
+import com.lost.user.domain.User;
+import com.lost.user.infra.repository.UserJpaRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +42,7 @@ class UpdateProfileControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -76,7 +79,10 @@ class UpdateProfileControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        User findUser = userRepository.findById(1L).get();
+        Optional<User> maybeUser = userRepository.findById(1L);
+        assertThat(maybeUser.isPresent()).isTrue();
+
+        User findUser = maybeUser.get();
         assertAll(
                 () -> assertThat(findUser.getNickname()).isEqualTo("example2"),
                 () -> assertThat(findUser.equalsToPlainPassword("examplepassword2", passwordEncoder)).isTrue()

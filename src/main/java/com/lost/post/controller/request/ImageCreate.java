@@ -1,5 +1,7 @@
 package com.lost.post.controller.request;
 
+import com.lost.image.domain.PostImage;
+import com.lost.post.domain.Post;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,11 +26,12 @@ public class ImageCreate {
         this.originalFileName = originalFileName;
     }
 
-    public Image toImage() {
-        return Image.builder()
+    public PostImage toEntity(Post post) {
+        return PostImage.builder()
                 .url(url)
                 .fileName(fileName)
                 .originalFileName(originalFileName)
+                .post(post)
                 .build();
     }
 }

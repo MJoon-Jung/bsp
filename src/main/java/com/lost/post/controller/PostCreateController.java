@@ -21,8 +21,7 @@ public class PostCreateController {
     @PostMapping("/api/posts")
     public ResponseEntity<PostResponse> create(@RequestBody PostCreateRequest postCreateRequest,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Post post = postCreateService.create(userPrincipal.getUserId(), postCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(PostResponse.from(post));
+                .body(postCreateService.create(userPrincipal.getUserId(), postCreateRequest));
     }
 }

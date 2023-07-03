@@ -1,7 +1,7 @@
 package com.lost.image.controller;
 
-import com.lost.image.controller.response.ImageResponse;
-import com.lost.image.service.ImageUploadService;
+import com.lost.image.service.FileUploadService;
+import com.lost.image.service.dto.FileSaveResult;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class ImageUploadController {
+public class FileUploadController {
 
-    private final ImageUploadService imageUploadService;
+    private final FileUploadService fileUploadService;
 
     @PostMapping("/api/posts/images")
-    public ResponseEntity<List<ImageResponse>> handleFileUpload(
+    public ResponseEntity<List<FileSaveResult>> handleFileUpload(
             @RequestParam("image") List<MultipartFile> imageFiles) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(imageUploadService.store(imageFiles));
+                .body(fileUploadService.store(imageFiles));
     }
 }

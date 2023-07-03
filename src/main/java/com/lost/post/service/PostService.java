@@ -1,7 +1,8 @@
 package com.lost.post.service;
 
 import com.lost.common.domain.exception.ResourceNotFoundException;
-import com.lost.post.service.repository.PostRepository;
+import com.lost.post.domain.Post;
+import com.lost.post.infra.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -38,6 +38,6 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getOne(@Valid @Positive Long userId) {
         return ResponseEntity.ok()
-                .body(UserResponse.from(userService.getOne(userId)));
+                .body(userService.loadOne(userId));
     }
 }

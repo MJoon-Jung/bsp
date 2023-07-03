@@ -1,4 +1,4 @@
-package com.lost.auth.controller;
+package com.lost.user.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -10,7 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lost.user.controller.request.SignUpRequest;
-import com.lost.user.service.repostiory.UserRepository;
+import com.lost.user.domain.User;
+import com.lost.user.infra.repository.UserJpaRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ class UserSignUpControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
