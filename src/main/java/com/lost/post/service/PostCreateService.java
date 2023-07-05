@@ -1,7 +1,7 @@
 package com.lost.post.service;
 
 import com.lost.common.domain.exception.ResourceNotFoundException;
-import com.lost.image.infra.ResourceUtil;
+import com.lost.image.service.FileUtil;
 import com.lost.post.controller.request.ImageCreate;
 import com.lost.post.controller.request.ImageCreateRequest;
 import com.lost.post.controller.request.PostCreateRequest;
@@ -22,7 +22,7 @@ public class PostCreateService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final ResourceUtil resourceUtil;
+    private final FileUtil fileUtil;
 
     public PostResponse create(Long userId, PostCreateRequest postCreateRequest) {
         User user = userRepository.findById(userId)
@@ -33,7 +33,7 @@ public class PostCreateService {
         ImageCreateRequest imageCreateRequest = postCreateRequest.getImageCreateRequest();
         if (!(Objects.isNull(imageCreateRequest) || imageCreateRequest.isEmpty())) {
             for (ImageCreate imageCreate : imageCreateRequest.getImageCreate()) {
-                resourceUtil.find(imageCreate.getFileName());
+                fileUtil.find(imageCreate.getFileName());
             }
             imageCreateRequest.toEntity(post);
         }

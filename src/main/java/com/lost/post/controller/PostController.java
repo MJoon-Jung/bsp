@@ -19,6 +19,6 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<PostResponse> load(@PathVariable Long postId) {
         return ResponseEntity.ok()
-                .body(PostResponse.from(postService.postDetails(postId)));
+                .body(PostResponse.from(postService.load(postId)));
     }
 }

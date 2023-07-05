@@ -5,6 +5,7 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: create
     properties:
@@ -26,7 +27,6 @@ server:
         httpOnly: true
     multipart:
       enabled: true
-      location: /home/jun/dev/lost/src/main/resources/tmp
       max-file-size: 128KB
       max-request-size: 128KB
 #        sameSite: strict
@@ -34,10 +34,9 @@ server:
 #        domain: localhost
 
 env:
-  client-url: http://localhost:3000
+  client-url: ${CLIENT_URL}
 
 storage:
   image-config:
-    root-location: src/main/resources/uploads
-    base-url: http://localhost:8080/uploads/images
-    resource-path: classpath*:uploads/**
+    root-location: ${IMAGE_ROOT_LOCATION}
+    base-url: ${IMAGE_BASE_URL}

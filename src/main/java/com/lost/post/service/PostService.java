@@ -12,7 +12,7 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public Post postDetails(Long postId) {
+    public Post load(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("POST", postId));
     }
