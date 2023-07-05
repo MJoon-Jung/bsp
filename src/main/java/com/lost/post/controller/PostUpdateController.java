@@ -25,6 +25,6 @@ public class PostUpdateController {
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         postUpdateService.update(postId, userPrincipal.getUserId(), postUpdateRequest);
         return ResponseEntity.ok()
-                .body(PostResponse.from(postService.postDetails(postId)));
+                .body(PostResponse.from(postService.load(postId)));
     }
 }
