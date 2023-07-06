@@ -1,6 +1,7 @@
 package com.lost.user.controller;
 
 import com.lost.common.domain.exception.InvalidRequestException;
+import com.lost.security.userdetails.UserPrincipal;
 import com.lost.user.controller.response.CheckDuplicatedUserNicknameResponse;
 import com.lost.user.controller.response.UserResponse;
 import com.lost.user.service.UserService;
@@ -8,6 +9,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,5 +41,11 @@ public class UserController {
     public ResponseEntity<UserResponse> getOne(@Valid @Positive Long userId) {
         return ResponseEntity.ok()
                 .body(userService.loadOne(userId));
+    }
+
+    @GetMapping("/my-info")
+    public ResponseEntity<UserResponse> loadMyInfo(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok()
+                .body(userService.loadOne(userPrincipal.getUserId()));
     }
 }
