@@ -26,6 +26,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -61,8 +62,9 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilter(corsFilter())
                 .addFilterBefore(jsonLoginRequestFilter(), UsernamePasswordAuthenticationFilter.class)
-                .logout(config -> config.logoutUrl("/api/auth/logout")
+                .logout(config -> config.logoutRequestMatcher(new AntPathRequestMatcher("/api/auth/logout", "POST"))
                         .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                         .deleteCookies(SESSION_NAME)
                         .logoutSuccessHandler(logoutSuccessHandler()))
                 .build();
