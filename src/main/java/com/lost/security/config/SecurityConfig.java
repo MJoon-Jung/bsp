@@ -24,6 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,6 +35,7 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private static final String SESSION_NAME = "JSESSIONID";
     private final UserService userService;
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
@@ -59,8 +61,16 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilter(corsFilter())
                 .addFilterBefore(jsonLoginRequestFilter(), UsernamePasswordAuthenticationFilter.class)
-                .logout(config -> config.logoutUrl("/api/auth/logout"))
+                .logout(config -> config.logoutUrl("/api/auth/logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies(SESSION_NAME)
+                        .logoutSuccessHandler(logoutSuccessHandler()))
                 .build();
+    }
+
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return new com.lost.security.handler.LogoutSuccessHandler(objectMapper);
     }
 
     @Bean
