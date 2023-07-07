@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostUpdateRequest {
 
-    @NotBlank(message = "제목은 필수 입력 값입니다.")
-    private String title;
     @NotBlank(message = "본문은 필수 입력 값입니다.")
     private String content;
     private TradeType tradeType;
@@ -31,9 +29,8 @@ public class PostUpdateRequest {
     private ImageCreateRequest imageCreateRequest;
 
     @Builder
-    public PostUpdateRequest(String title, String content, TradeType tradeType, Integer reward, String itemName,
+    public PostUpdateRequest(String content, TradeType tradeType, Integer reward, String itemName,
             Address address, ImageCreateRequest imageCreateRequest) {
-        this.title = title;
         this.content = content;
         this.tradeType = tradeType;
         this.reward = reward;

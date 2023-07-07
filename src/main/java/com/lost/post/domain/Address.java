@@ -1,7 +1,6 @@
 package com.lost.post.domain;
 
 import com.lost.common.domain.exception.InvalidRequestException;
-import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,8 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Embeddable
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Address {
 
     @NotBlank

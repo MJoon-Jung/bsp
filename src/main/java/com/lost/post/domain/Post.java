@@ -18,7 +18,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +36,11 @@ public class Post extends BaseTimeJpaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
     private String content;
     private Integer reward;
     private String itemName;
     @Embedded
-    private Address address;
+    private JpaAddress address;
     @Enumerated(EnumType.STRING)
     private PostStatus status;
     @Enumerated(EnumType.STRING)
@@ -52,27 +50,24 @@ public class Post extends BaseTimeJpaEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FINDER_ID")
     private User finder;
 
     @Builder(toBuilder = true)
-    public Post(Long id, String title, String content, Integer reward, String itemName, Address address,
+    public Post(Long id, String content, Integer reward, String itemName, JpaAddress address,
             PostStatus status,
             TradeType tradeType, List<PostImage> postImages, User user, User finder) {
         this.id = id;
-        this.title = title;
         this.content = content;
         this.reward = reward;
         this.itemName = itemName;
         this.address = address;
         this.status = status;
         this.tradeType = tradeType;
-        if (postImages != null) {
-            this.postImages = postImages;
-        }
+        this.postImages = postImages == null ? this.postImages : postImages;
         this.user = user;
-        user.getPosts().add(this);
+        user.getWritePosts().add(this);
         this.finder = finder;
     }
 
@@ -81,11 +76,10 @@ public class Post extends BaseTimeJpaEntity {
             throw new UnauthorizedException();
         }
 
-        title = postUpdateRequest.getTitle();
         content = postUpdateRequest.getContent();
         reward = postUpdateRequest.getReward();
         itemName = postUpdateRequest.getItemName();
-        address = postUpdateRequest.getAddress();
+        address = JpaAddress.from(postUpdateRequest.getAddress());
         tradeType = postUpdateRequest.getTradeType();
 
         postImages.clear();

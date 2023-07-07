@@ -14,7 +14,6 @@ import lombok.Getter;
 public class PostResponse {
 
     private final Long id;
-    private final String title;
     private final String content;
     private final Integer reward;
     private final TradeType tradeType;
@@ -27,12 +26,11 @@ public class PostResponse {
     private final LocalDateTime updatedAt;
 
     @Builder
-    public PostResponse(Long id, String title, String content, Integer reward, TradeType tradeType,
+    public PostResponse(Long id, String content, Integer reward, TradeType tradeType,
             WriterResponse writer,
             String itemName, Address address, List<PostImageResponse> images, PostStatus status,
             LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.title = title;
         this.content = content;
         this.reward = reward;
         this.tradeType = tradeType;
@@ -48,13 +46,12 @@ public class PostResponse {
     public static PostResponse from(Post post) {
         return PostResponse.builder()
                 .id(post.getId())
-                .title(post.getTitle())
                 .content(post.getContent())
                 .reward(post.getReward())
                 .tradeType(post.getTradeType())
                 .writer(WriterResponse.from(post.getUser()))
                 .itemName(post.getItemName())
-                .address(post.getAddress())
+                .address(post.getAddress().toModel())
                 .images(post.getPostImages().stream().map(PostImageResponse::from).toList())
                 .status(post.getStatus())
                 .createdAt(post.getCreatedAt())

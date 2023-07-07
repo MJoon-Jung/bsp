@@ -38,18 +38,20 @@ public class User extends BaseTimeJpaEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;
     @OneToMany(mappedBy = "user")
-    private List<Post> posts = new ArrayList<>();
+    private List<Post> writePosts = new ArrayList<>();
+    @OneToMany(mappedBy = "finder")
+    private List<Post> findPosts = new ArrayList<>();
 
     @Builder(toBuilder = true)
-    public User(Long id, String email, String nickname, String password, UserRole role, List<Post> posts) {
+    public User(Long id, String email, String nickname, String password, UserRole role, List<Post> writePosts,
+            List<Post> findPosts) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.password = password;
         this.role = role;
-        if (posts != null) {
-            this.posts = posts;
-        }
+        this.writePosts = writePosts == null ? this.writePosts : writePosts;
+        this.findPosts = findPosts == null ? this.findPosts : findPosts;
     }
 
     public User encryptPassword(PasswordEncoder passwordEncoder) {

@@ -2,6 +2,7 @@ package com.lost.post.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lost.post.domain.Address;
+import com.lost.post.domain.JpaAddress;
 import com.lost.post.domain.Post;
 import com.lost.post.domain.PostStatus;
 import com.lost.post.domain.TradeType;
@@ -18,8 +19,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostCreateRequest {
 
-    @NotBlank(message = "제목은 필수 입력 값입니다.")
-    private String title;
     @NotBlank(message = "본문은 필수 입력 값입니다.")
     private String content;
     private TradeType tradeType;
@@ -34,9 +33,8 @@ public class PostCreateRequest {
     private ImageCreateRequest imageCreateRequest;
 
     @Builder
-    public PostCreateRequest(String title, String content, TradeType tradeType, Integer reward, String itemName,
+    public PostCreateRequest(String content, TradeType tradeType, Integer reward, String itemName,
             Address address, ImageCreateRequest imageCreateRequest) {
-        this.title = title;
         this.content = content;
         this.tradeType = tradeType;
         this.reward = reward;
@@ -47,11 +45,10 @@ public class PostCreateRequest {
 
     public Post toEntity(User user) {
         return Post.builder()
-                .title(title)
                 .content(content)
                 .reward(reward)
                 .itemName(itemName)
-                .address(address)
+                .address(JpaAddress.from(address))
                 .status(PostStatus.PENDING)
                 .tradeType(tradeType)
                 .user(user)

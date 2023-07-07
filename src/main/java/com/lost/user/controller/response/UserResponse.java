@@ -16,19 +16,21 @@ public class UserResponse {
     private final String email;
     private final String nickname;
     private final UserRole role;
-    private final List<PostResponse> posts;
+    private final List<PostResponse> writePosts;
+    private final List<PostResponse> findPosts;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
     @Builder
     @QueryProjection
-    public UserResponse(Long id, String email, String nickname, UserRole role, List<PostResponse> posts,
-            LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public UserResponse(Long id, String email, String nickname, UserRole role, List<PostResponse> writePosts,
+            List<PostResponse> findPosts, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.role = role;
-        this.posts = posts;
+        this.writePosts = writePosts;
+        this.findPosts = findPosts;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -39,7 +41,8 @@ public class UserResponse {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .role(user.getRole())
-                .posts(user.getPosts().stream().map(PostResponse::from).toList())
+                .writePosts(user.getWritePosts().stream().map(PostResponse::from).toList())
+                .findPosts(user.getFindPosts().stream().map(PostResponse::from).toList())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
