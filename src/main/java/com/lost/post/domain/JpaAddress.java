@@ -1,47 +1,47 @@
 package com.lost.post.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
 
+@Slf4j
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JpaAddress {
 
     private String street;
-    private Point point;
+    @Column(columnDefinition = "geometry SRID 0")
+    private Point location;
 
     @Builder
-    public JpaAddress(String street, Point point) {
+    public JpaAddress(String street, Point location) {
         this.street = street;
-        this.point = point;
+        this.location = location;
     }
 
     public Address toModel() {
         return Address.builder()
                 .street(street)
-                .latitude(point.getY())
-                .longitude(point.getX())
+                .latitude(location.getX())
+                .longitude(location.getY())
                 .build();
     }
 
     public static JpaAddress from(Address address) {
-        try {
-            String pointWKT = String.format("POINT(%s %s)", address.getLongitude(), address.getLatitude());
-            Point point = (Point) new WKTReader().read(pointWKT);
-
-            return JpaAddress.builder()
-                    .street(address.getStreet())
-                    .point(point)
-                    .build();
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+        Coordinate coordinate = new Coordinate(address.getLatitude(), address.getLongitude());
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Point point = geometryFactory.createPoint(coordinate);
+        return JpaAddress.builder()
+                .street(address.getStreet())
+                .location(point)
+                .build();
     }
 }
