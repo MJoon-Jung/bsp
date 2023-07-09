@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 
 @Getter
 public class ImageResponse {
+
     private final MediaType contentType;
     private final byte[] content;
 

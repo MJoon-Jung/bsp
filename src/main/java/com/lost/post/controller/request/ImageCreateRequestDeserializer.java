@@ -15,7 +15,7 @@ public class ImageCreateRequestDeserializer extends JsonDeserializer<ImageCreate
 
     @Override
     public ImageCreateRequest deserialize(JsonParser parser, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         ObjectCodec codec = parser.getCodec();
         JsonNode node = codec.readTree(parser);
 

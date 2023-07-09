@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.User;
 
 public class UserPrincipal extends User {
 
-    private Long userId;
+    private final Long userId;
 
     public UserPrincipal(com.lost.user.domain.User user) {
         super(user.getEmail(), user.getPassword(), Set.of());

@@ -21,7 +21,8 @@ public class PostUpdateController {
     private final PostService postService;
 
     @PutMapping("/api/posts/{postId}")
-    public ResponseEntity<PostResponse> update(@PathVariable Long postId, @RequestBody PostUpdateRequest postUpdateRequest,
+    public ResponseEntity<PostResponse> update(@PathVariable Long postId,
+            @RequestBody PostUpdateRequest postUpdateRequest,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
         postUpdateService.update(postId, userPrincipal.getUserId(), postUpdateRequest);
         return ResponseEntity.ok()
