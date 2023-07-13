@@ -4,7 +4,7 @@ import com.lost.post.domain.Address;
 import com.lost.post.domain.Post;
 import com.lost.post.domain.PostStatus;
 import com.lost.post.domain.TradeType;
-import com.lost.user.controller.response.WriterResponse;
+import com.lost.user.controller.response.SimpleUserInfoResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -17,7 +17,7 @@ public class PostResponse {
     private final String content;
     private final Integer reward;
     private final TradeType tradeType;
-    private final WriterResponse writer;
+    private final SimpleUserInfoResponse writer;
     private final String itemName;
     private final Address address;
     private final List<PostImageResponse> images;
@@ -27,7 +27,7 @@ public class PostResponse {
 
     @Builder
     public PostResponse(Long id, String content, Integer reward, TradeType tradeType,
-            WriterResponse writer,
+            SimpleUserInfoResponse writer,
             String itemName, Address address, List<PostImageResponse> images, PostStatus status,
             LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
@@ -49,7 +49,7 @@ public class PostResponse {
                 .content(post.getContent())
                 .reward(post.getReward())
                 .tradeType(post.getTradeType())
-                .writer(WriterResponse.from(post.getUser()))
+                .writer(SimpleUserInfoResponse.from(post.getUser()))
                 .itemName(post.getItemName())
                 .address(post.getAddress().toModel())
                 .images(post.getPostImages().stream().map(PostImageResponse::from).toList())
