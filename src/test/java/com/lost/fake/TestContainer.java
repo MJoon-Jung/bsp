@@ -11,7 +11,7 @@ public class TestContainer {
     //    public final PostRepository postRepository;
 //    public final ImagePostRepository imagePostRepository;
     public final PasswordEncoder passwordEncoder;
-    public final ImageConfig imageConfig;
+//    public final ImageConfig imageConfig;
 
     @Builder
     public TestContainer() {
@@ -22,8 +22,8 @@ public class TestContainer {
 //                .userRepository(userRepository)
 //                .build();
         passwordEncoder = new FakePasswordEncoder();
-        imageConfig = new ImageConfig("/uploads",
-                "http://localhost:8080/uploads/images",
-                "/uploads/**");
+//        imageConfig = new ImageConfig("/uploads",
+//                "http://localhost:8080/uploads/images",
+//                "/uploads/**");
     }
 }
