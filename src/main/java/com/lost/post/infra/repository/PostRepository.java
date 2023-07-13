@@ -10,7 +10,8 @@ import org.springframework.data.repository.query.Param;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(value = "SELECT * FROM post "
-            + "WHERE MBRContains(ST_LINESTRINGFROMTEXT(CONCAT('LINESTRING(',"
+            + "WHERE post.status='PENDING' "
+            + "and MBRContains(ST_LINESTRINGFROMTEXT(CONCAT('LINESTRING(',"
             + ":#{#southeast.latitude}, ' ', :#{#southeast.longitude}, ',',"
             + ":#{#southwest.latitude}, ' ', :#{#southwest.longitude}, ',',"
             + ":#{#northeast.latitude}, ' ', :#{#northeast.longitude}, ',',"
