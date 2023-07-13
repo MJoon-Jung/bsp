@@ -69,10 +69,13 @@ public class Post extends BaseTimeJpaEntity {
         this.user = user;
         user.getWritePosts().add(this);
         this.finder = finder;
+        if (this.finder != null) {
+            finder.getFindPosts().add(this);
+        }
     }
 
-    public void update(PostUpdateRequest postUpdateRequest, Long userId) {
-        if (!getUser().getId().equals(userId)) {
+    public void update(PostUpdateRequest postUpdateRequest, Long ownerId) {
+        if (!getUser().getId().equals(ownerId)) {
             throw new UnauthorizedException();
         }
 
@@ -89,10 +92,12 @@ public class Post extends BaseTimeJpaEntity {
         }
     }
 
-    public Post found(PostStatus status, User findUser) {
-        return this.toBuilder()
-                .status(status)
-                .finder(findUser)
-                .build();
+    public void tradeItem(Long ownerId, User finder) {
+        if (!getUser().getId().equals(ownerId)) {
+            throw new UnauthorizedException();
+        }
+
+        status = PostStatus.END;
+        this.finder = finder;
     }
 }
