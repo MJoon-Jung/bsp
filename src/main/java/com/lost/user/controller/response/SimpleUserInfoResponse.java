@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class WriterResponse {
+public class SimpleUserInfoResponse {
 
     private final Long id;
     private final String email;
@@ -17,7 +17,7 @@ public class WriterResponse {
     private final LocalDateTime updatedAt;
 
     @Builder
-    public WriterResponse(Long id, String email, String nickname, UserRole role,
+    public SimpleUserInfoResponse(Long id, String email, String nickname, UserRole role,
             LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.email = email;
@@ -27,8 +27,8 @@ public class WriterResponse {
         this.updatedAt = updatedAt;
     }
 
-    public static WriterResponse from(User user) {
-        return WriterResponse.builder()
+    public static SimpleUserInfoResponse from(User user) {
+        return SimpleUserInfoResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
