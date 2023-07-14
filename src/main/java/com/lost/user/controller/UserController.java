@@ -3,6 +3,7 @@ package com.lost.user.controller;
 import com.lost.common.domain.exception.InvalidRequestException;
 import com.lost.security.userdetails.UserPrincipal;
 import com.lost.user.controller.response.CheckDuplicatedUserNicknameResponse;
+import com.lost.user.controller.response.MyInfoResponse;
 import com.lost.user.controller.response.UserResponse;
 import com.lost.user.service.UserService;
 import jakarta.validation.Valid;
@@ -44,8 +45,8 @@ public class UserController {
     }
 
     @GetMapping("/my-info")
-    public ResponseEntity<UserResponse> loadMyInfo(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<MyInfoResponse> loadMyInfo(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok()
-                .body(userService.loadOne(userPrincipal.getUserId()));
+                .body(userService.loadMyInfo(userPrincipal.getUserId()));
     }
 }

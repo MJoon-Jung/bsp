@@ -4,7 +4,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lost.security.userdetails.UserPrincipal;
-import com.lost.user.controller.response.UserResponse;
+import com.lost.user.controller.response.MyInfoResponse;
 import com.lost.user.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-        UserResponse user = userService.loadOne(principal.getUserId());
+        MyInfoResponse user = userService.loadMyInfo(principal.getUserId());
         log.info("[인증 성공] id = {}, email={}", user.getId(), user.getEmail());
 
         response.setStatus(200);
