@@ -2,7 +2,6 @@ package com.lost.user.controller.response;
 
 import com.lost.post.controller.response.PostResponse;
 import com.lost.user.domain.User;
-import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -20,7 +19,6 @@ public class UserResponse {
     private final LocalDateTime updatedAt;
 
     @Builder
-    @QueryProjection
     public UserResponse(Long id, String email, String nickname, List<PostResponse> writePosts,
             List<PostResponse> findPosts, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
