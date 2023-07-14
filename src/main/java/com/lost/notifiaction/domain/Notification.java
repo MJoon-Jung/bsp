@@ -28,6 +28,7 @@ public class Notification extends BaseTimeJpaEntity {
     private Long id;
     @Enumerated(EnumType.STRING)
     private NotificationType type;
+    private String message;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User targetUser;
@@ -36,8 +37,9 @@ public class Notification extends BaseTimeJpaEntity {
     private Boolean read;
 
     @Builder
-    public Notification(NotificationType type, User targetUser, Boolean read) {
+    public Notification(NotificationType type, String message, User targetUser, Boolean read) {
         this.type = type;
+        this.message = message;
         this.targetUser = targetUser;
         this.read = read != null && read;
     }
