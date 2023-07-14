@@ -45,3 +45,4 @@ Dockerfile
 http
 uploads
 push.sh
+application-*.yml
