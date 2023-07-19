@@ -1,7 +1,7 @@
 package com.lost.post.service;
 
 import com.lost.common.domain.exception.ResourceNotFoundException;
-import com.lost.image.service.FileUtil;
+import com.lost.image.service.FileFinder;
 import com.lost.post.controller.request.ImageCreate;
 import com.lost.post.controller.request.ImageCreateRequest;
 import com.lost.post.controller.request.PostUpdateRequest;
@@ -22,7 +22,7 @@ public class PostUpdateService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final FileUtil fileUtil;
+    private final FileFinder fileFinder;
 
     public void update(Long postId, Long userId, PostUpdateRequest postUpdateRequest) {
         Post post = postRepository.findById(postId)
@@ -31,7 +31,7 @@ public class PostUpdateService {
         ImageCreateRequest imageCreateRequest = postUpdateRequest.getImageCreateRequest();
         if (!(Objects.isNull(imageCreateRequest) || imageCreateRequest.isEmpty())) {
             for (ImageCreate imageCreate : imageCreateRequest.getImageCreate()) {
-                fileUtil.find(imageCreate.getFileName());
+                fileFinder.find(imageCreate.getFileName());
             }
         }
 

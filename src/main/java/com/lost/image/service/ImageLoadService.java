@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 public class ImageLoadService {
 
     private static final String PNG = "PNG";
-    private final FileUtil fileUtil;
+    private final FileFinder fileFinder;
 
     public ImageResponse load(String imageName) {
         return ImageResponse.builder()
@@ -25,7 +25,7 @@ public class ImageLoadService {
     }
 
     private byte[] getFileContent(String imageName) {
-        File file = fileUtil.find(imageName);
+        File file = fileFinder.find(imageName);
         try (FileInputStream fis = new FileInputStream(file)) {
             return fis.readAllBytes();
         } catch (IOException e) {
