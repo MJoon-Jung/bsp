@@ -1,213 +1,171 @@
-//package com.lost.post.service;
-//
-//import static org.assertj.core.api.Assertions.assertThatThrownBy;
-//import static org.junit.jupiter.api.Assertions.assertAll;
-//import static org.mockito.BDDMockito.given;
-//
-//import com.lost.common.domain.exception.ResourceNotFoundException;
-//import com.lost.fake.TestContainer;
-//import com.lost.image.infra.ResourceFinder;
-//import com.lost.post.controller.request.ImageCreate;
-//import com.lost.post.controller.request.ImageCreateRequest;
-//import com.lost.post.controller.request.PostCreateRequest;
-//import com.lost.post.domain.Address;
-//import com.lost.post.domain.TradeType;
-//import java.util.List;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.Mockito;
-//
-//class PostCreateServiceTest {
-//
-//    private PostCreateService postCreateService;
-//    private TestContainer testContainer;
-//
-//    @BeforeEach
-//    void setUp() {
-//        testContainer = new TestContainer();
-//        postCreateService = new PostCreateService(
-//                testContainer.postRepository,
-//                testContainer.imagePostRepository,
-//                testContainer.userRepository,
-//                testContainer.imageConfig
-//        );
-//    }
-//
-//    @Test
-//    @DisplayName("게시글 생성 성공 - 이미지 첨부 X")
-//    void create() {
-//        //given
-//        User user = User.builder()
-//                .id(1L)
-//                .email("example@email.com")
-//                .nickname("example")
-//                .password("password")
-//                .build();
-//        testContainer.userRepository.save(user);
-//
-//        PostCreateRequest postCreateRequest = PostCreateRequest.builder()
-//                .title("This is new title")
-//                .content("This is new content")
-//                .tradeType(TradeType.DIRECT)
-//                .reward(1_000)
-//                .itemName("airpods")
-//                .address(Address.builder()
-//                        .latitude(38.123456)
-//                        .longitude(126.123456)
-//                        .street("서울시 광진구 자양동 123-123")
-//                        .build())
-//                .build();
-//        //when
-//        Post post = postCreateService.create(user.getId(), postCreateRequest);
+package com.lost.post.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+
+import com.lost.common.domain.exception.ResourceNotFoundException;
+import com.lost.image.service.FileFinder;
+import com.lost.post.controller.request.ImageCreate;
+import com.lost.post.controller.request.ImageCreateRequest;
+import com.lost.post.controller.request.PostCreateRequest;
+import com.lost.post.controller.response.PostResponse;
+import com.lost.post.domain.Address;
+import com.lost.post.domain.Post;
+import com.lost.post.domain.TradeType;
+import com.lost.post.infra.repository.PostRepository;
+import com.lost.user.domain.User;
+import com.lost.user.domain.UserRole;
+import com.lost.user.service.repostiory.UserRepository;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
+@SpringBootTest
+class PostCreateServiceTest {
+
+    @Autowired
+    private PostCreateService postCreateService;
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @MockBean
+    private FileFinder fileFinder;
+
+    @Test
+    @DisplayName("게시글 생성 - 성공")
+    void postCreateService_create_return_post_response() {
+        //given
+        User user = User.builder()
+                .email("example@email.com")
+                .nickname("example")
+                .password("examplepassword")
+                .role(UserRole.MEMBER)
+                .build();
+        user = userRepository.save(user);
+
+        PostCreateRequest postCreateRequest = PostCreateRequest.builder()
+                .content("This is new content")
+                .tradeType(TradeType.DIRECT)
+                .reward(1_000)
+                .itemName("airpods")
+                .address(Address.builder()
+                        .latitude(38.123456)
+                        .longitude(126.123456)
+                        .street("서울시 광진구 자양동 123-123")
+                        .build())
+                .imageCreateRequest(ImageCreateRequest.builder()
+                        .imageCreate(List.of(
+                                ImageCreate.builder()
+                                        .url("http://localhost:8080/images/ABCDEFGHIJKLMNOPQRSTUVWXYZ_test.jpg")
+                                        .fileName("ABCDEFGHIJKLMNOPQRSTUVWXYZ_test.jpg")
+                                        .originalFileName("test.jpg")
+                                        .build()))
+                        .build())
+                .build();
+
+        given(fileFinder.find(any(String.class)))
+                .willReturn(null);
+
+        //when
+        PostResponse postResponse = postCreateService.create(user.getId(), postCreateRequest);
+        List<Post> posts = postRepository.findAll();
 //        //then
-//        assertAll(
-//                () -> assertThat(post.getTitle()).isEqualTo("This is new title"),
-//                () -> assertThat(post.getContent()).isEqualTo("This is new content"),
-//                () -> assertThat(post.getTradeType()).isEqualTo(TradeType.DIRECT),
-//                () -> assertThat(post.getReward()).isEqualTo(1_000),
-//                () -> assertThat(post.getLostItem().getName()).isEqualTo("airpods"),
-//                () -> assertThat(post.getLostItem().getAddress().getLatitude()).isEqualTo(38.123456),
-//                () -> assertThat(post.getLostItem().getAddress().getLongitude()).isEqualTo(126.123456),
-//                () -> assertThat(post.getLostItem().getAddress().getStreet()).isEqualTo("서울시 광진구 자양동 123-123")
-//        );
-//    }
-//
-//    @Test
-//    @DisplayName("게시글 생성 성공 - 이미지 첨부 O")
-//    void create2() {
-//        //given
-//        Image image = Image.builder()
-//                .url("https://example.com/image.jpg")
-//                .fileName("123123airpods.jpg")
-//                .originalFileName("airpods.jpg")
-//                .build();
-//        testContainer.imagePostRepository.save(image);
-//
-//        User user = User.builder()
-//                .id(1L)
-//                .email("example@email.com")
-//                .nickname("example")
-//                .password("password")
-//                .build();
-//        testContainer.userRepository.save(user);
-//        ImageCreate imageCreate = ImageCreate.builder()
-//                .url("http://localhost:8080/images/upload/abcdef_abc.jpg")
-//                .originalFileName("abc.jpg")
-//                .fileName("abcdef_abc.jpg")
-//                .build();
-//        ImageCreate imageCreate2 = ImageCreate.builder()
-//                .url("http://localhost:8080/images/upload/abcdef2_bac.jpg")
-//                .originalFileName("abc.jpg")
-//                .fileName("abcdef_abc.jpg")
-//                .build();
-//        ImageCreate imageCreate3 = ImageCreate.builder()
-//                .url("http://localhost:8080/images/upload/abcdef3_cab.jpg")
-//                .originalFileName("abc.jpg")
-//                .fileName("abcdef_abc.jpg")
-//                .build();
-//
-//        PostCreateRequest postCreateRequest = PostCreateRequest.builder()
-//                .title("This is new title")
-//                .content("This is new content")
-//                .tradeType(TradeType.DIRECT)
-//                .reward(1_000)
-//                .itemName("airpods")
-//                .imageCreateRequest(ImageCreateRequest.builder()
-//                        .imageCreate(List.of(imageCreate, imageCreate2, imageCreate3))
-//                        .build())
-//                .address(Address.builder()
-//                        .latitude(38.123456)
-//                        .longitude(126.123456)
-//                        .street("서울시 광진구 자양동 123-123")
-//                        .build())
-//                .build();
-//        //when
-//        ResourceFinder resourceFinder = Mockito.mock(ResourceFinder.class);
-//        given(resourceFinder.find("images/upload/abcdef", "abc.jpg"))
-//                .willReturn(null);
-//        Post post = postCreateService.create(user.getId(), postCreateRequest);
-//        //then
-//        assertAll(
-//                () -> assertThat(post.getTitle()).isEqualTo("This is new title"),
-//                () -> assertThat(post.getContent()).isEqualTo("This is new content"),
-//                () -> assertThat(post.getTradeType()).isEqualTo(TradeType.DIRECT),
-//                () -> assertThat(post.getReward()).isEqualTo(1_000),
-//                () -> assertThat(post.getLostItem().getName()).isEqualTo("airpods"),
-//                () -> assertThat(post.getLostItem().getAddress().getLatitude()).isEqualTo(38.123456),
-//                () -> assertThat(post.getLostItem().getAddress().getLongitude()).isEqualTo(126.123456),
-//                () -> assertThat(post.getLostItem().getAddress().getStreet()).isEqualTo("서울시 광진구 자양동 123-123"),
-//                () -> assertThat(post.getLostItem().getImages().size()).isEqualTo(3),
-//                () -> assertThat(post.getLostItem().getImages().get(0).getFileName()).isEqualTo("abcdef_abc.jpg"),
-//                () -> assertThat(post.getLostItem().getImages().get(0).getOriginalFileName()).isEqualTo("abc.jpg")
-//        );
-//    }
-//
-//    @Test
-//    @DisplayName("게시글 생성 실패 - 유저가 존재하지 않음")
-//    void test1() {
-//        //given
-//        PostCreateRequest postCreateRequest = PostCreateRequest.builder()
-//                .title("This is new title")
-//                .content("This is new content")
-//                .tradeType(TradeType.DIRECT)
-//                .reward(1_000)
-//                .itemName("airpods")
-//                .address(Address.builder()
-//                        .latitude(38.123456)
-//                        .longitude(126.123456)
-//                        .street("서울시 광진구 자양동 123-123")
-//                        .build())
-//                .build();
-//        //when
-//        assertThatThrownBy(() -> postCreateService.create(1L, postCreateRequest))
-//                .isInstanceOf(ResourceNotFoundException.class);
-//    }
-//
-//    @Test
-//    @DisplayName("게시글 생성 실패 - 존재하지 않는 이미지 사용")
-//    void test2() {
-//        //given
-//        User user = User.builder()
-//                .id(1L)
-//                .email("example@email.com")
-//                .nickname("example")
-//                .password("password")
-//                .build();
-//        testContainer.userRepository.save(user);
-//        ImageCreate imageCreate = ImageCreate.builder()
-//                .url("http://localhost:8080/images/upload/abcdef_abc.jpg")
-//                .originalFileName("abc.jpg")
-//                .fileName("abcdef_abc.jpg")
-//                .build();
-//        ImageCreate imageCreate2 = ImageCreate.builder()
-//                .url("http://localhost:8080/images/upload/abcdef2_bac.jpg")
-//                .originalFileName("abc.jpg")
-//                .fileName("abcdef_abc.jpg")
-//                .build();
-//        ImageCreate imageCreate3 = ImageCreate.builder()
-//                .url("http://localhost:8080/images/upload/abcdef3_cab.jpg")
-//                .originalFileName("abc.jpg")
-//                .fileName("abcdef_abc.jpg")
-//                .build();
-//
-//        PostCreateRequest postCreateRequest = PostCreateRequest.builder()
-//                .title("This is new title")
-//                .content("This is new content")
-//                .tradeType(TradeType.DIRECT)
-//                .reward(1_000)
-//                .itemName("airpods")
-//                .imageCreateRequest(ImageCreateRequest.builder()
-//                        .imageCreate(List.of(imageCreate, imageCreate2, imageCreate3))
-//                        .build())
-//                .address(Address.builder()
-//                        .latitude(38.123456)
-//                        .longitude(126.123456)
-//                        .street("서울시 광진구 자양동 123-123")
-//                        .build())
-//                .build();
-//        //when
-//        assertThatThrownBy(() -> postCreateService.create(1L, postCreateRequest))
-//                .isInstanceOf(ResourceNotFoundException.class);
-//    }
-//}
+        assertAll(
+                () -> assertThat(posts.size()).isEqualTo(1),
+                () -> assertThat(postResponse.getContent()).isEqualTo("This is new content"),
+                () -> assertThat(postResponse.getTradeType()).isEqualTo(TradeType.DIRECT),
+                () -> assertThat(postResponse.getReward()).isEqualTo(1_000),
+                () -> assertThat(postResponse.getItemName()).isEqualTo("airpods"),
+                () -> assertThat(postResponse.getAddress().getLatitude()).isEqualTo(38.123456),
+                () -> assertThat(postResponse.getAddress().getLongitude()).isEqualTo(126.123456),
+                () -> assertThat(postResponse.getAddress().getStreet()).isEqualTo("서울시 광진구 자양동 123-123"),
+                () -> assertThat(postResponse.getImages().size()).isEqualTo(1),
+                () -> assertThat(postResponse.getImages().get(0).getUrl()).isEqualTo(
+                        "http://localhost:8080/images/ABCDEFGHIJKLMNOPQRSTUVWXYZ_test.jpg"),
+                () -> assertThat(postResponse.getImages().get(0).getFileName()).isEqualTo(
+                        "ABCDEFGHIJKLMNOPQRSTUVWXYZ_test.jpg"),
+                () -> assertThat(postResponse.getImages().get(0).getOriginalFileName()).isEqualTo("test.jpg")
+        );
+    }
+
+    @Test
+    @DisplayName("게시글 생성 요청 시 존재하지 않는 유저 아이디를 PathVariable 로 넘기면 예외가 발생한다.")
+    void postCreateService_create_should_fail_if_user_does_not_exist() {
+        //given
+        PostCreateRequest postCreateRequest = PostCreateRequest.builder()
+                .content("This is new content")
+                .tradeType(TradeType.DIRECT)
+                .reward(1_000)
+                .itemName("airpods")
+                .address(Address.builder()
+                        .latitude(38.123456)
+                        .longitude(126.123456)
+                        .street("서울시 광진구 자양동 123-123")
+                        .build())
+                .imageCreateRequest(ImageCreateRequest.builder()
+                        .imageCreate(List.of(
+                                ImageCreate.builder()
+                                        .url("http://localhost:8080/images/ABCDEFGHIJKLMNOPQRSTUVWXYZ_test.jpg")
+                                        .fileName("ABCDEFGHIJKLMNOPQRSTUVWXYZ_test.jpg")
+                                        .originalFileName("test.jpg")
+                                        .build()))
+                        .build())
+                .build();
+        //when
+        //then
+        assertThatThrownBy(() -> postCreateService.create(1L, postCreateRequest))
+                .isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("게시글 생성 요청 시 존재하지 않는 파일을 첨부하면 예외가 발생한다.")
+    void postCreateService_create_should_fail_if_file_does_not_exist() {
+        //given
+        User user = User.builder()
+                .email("example@email.com")
+                .nickname("example")
+                .password("examplepassword")
+                .role(UserRole.MEMBER)
+                .build();
+
+        userRepository.save(user);
+
+        PostCreateRequest postCreateRequest = PostCreateRequest.builder()
+                .content("This is new content")
+                .tradeType(TradeType.DIRECT)
+                .reward(1_000)
+                .itemName("airpods")
+                .address(Address.builder()
+                        .latitude(38.123456)
+                        .longitude(126.123456)
+                        .street("서울시 광진구 자양동 123-123")
+                        .build())
+                .imageCreateRequest(ImageCreateRequest.builder()
+                        .imageCreate(List.of(
+                                ImageCreate.builder()
+                                        .url("http://localhost:8080/images/ABCDEFGHIJKLMNOPQRSTUVWXYZ_test.jpg")
+                                        .fileName("ABCDEFGHIJKLMNOPQRSTUVWXYZ_test.jpg")
+                                        .originalFileName("test.jpg")
+                                        .build()))
+                        .build())
+                .build();
+
+        given(fileFinder.find(any(String.class)))
+                .willThrow(new ResourceNotFoundException("IMAGE", "fileName", "ABCDEFGHIJKLMNOPQRSTUVWXYZ_test.jpg"));
+
+        //when
+        //then
+        assertThatThrownBy(() -> postCreateService.create(user.getId(), postCreateRequest))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("[IMAGE]: fileName ABCDEFGHIJKLMNOPQRSTUVWXYZ_test.jpg를 찾을 수 없습니다.");
+    }
+}
