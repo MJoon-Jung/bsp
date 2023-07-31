@@ -33,8 +33,12 @@ public class PostCreateRequest {
     private ImageCreateRequest imageCreateRequest;
 
     @Builder
-    public PostCreateRequest(String content, TradeType tradeType, Integer reward, String itemName,
-            Address address, ImageCreateRequest imageCreateRequest) {
+    public PostCreateRequest(String content,
+            TradeType tradeType,
+            Integer reward,
+            String itemName,
+            Address address,
+            ImageCreateRequest imageCreateRequest) {
         this.content = content;
         this.tradeType = tradeType;
         this.reward = reward;

@@ -1,7 +1,7 @@
 package com.lost.post.controller.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.lost.image.domain.PostImage;
 import com.lost.post.domain.Post;
@@ -13,16 +13,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-@JsonRootName(value = "images")
 @JsonDeserialize(using = ImageCreateRequestDeserializer.class)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageCreateRequest {
 
     @Valid
-    @JsonProperty("images")
+    @JsonValue
     private List<ImageCreate> imageCreate;
 
     @Builder
+    @JsonCreator
     public ImageCreateRequest(List<ImageCreate> imageCreate) {
         this.imageCreate = imageCreate;
     }
