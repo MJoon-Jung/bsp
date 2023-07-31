@@ -3,7 +3,7 @@ package com.lost.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.lost.fake.TestContainer;
+import com.lost.fake.TestUserContainer;
 import com.lost.user.controller.request.SignUpRequest;
 import com.lost.user.domain.User;
 import java.util.Optional;
@@ -14,11 +14,11 @@ import org.junit.jupiter.api.Test;
 class UserSignUpServiceTest {
 
     private UserSignUpService userSignUpService;
-    private TestContainer testContainer;
+    private TestUserContainer testContainer;
 
     @BeforeEach
     void setUp() {
-        testContainer = new TestContainer();
+        testContainer = new TestUserContainer();
         userSignUpService = new UserSignUpService(testContainer.userRepository, testContainer.passwordEncoder);
     }
 
